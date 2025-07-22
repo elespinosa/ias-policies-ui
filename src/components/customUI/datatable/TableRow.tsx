@@ -41,7 +41,18 @@ const TableRow: React.FC<TableRowProps> = ({
   const rowId = String(row.id);
 
   const getAlignment = (val: any) => {
-    return val && val.align ? "text-"+ val.align : ""
+    if (!val || !val.align) return "";
+    
+    switch (val.align) {
+      case "left":
+        return "text-left";
+      case "center":
+        return "text-center";
+      case "right":
+        return "text-right";
+      default:
+        return "";
+    }
   }
 
   return (
@@ -115,7 +126,8 @@ const TableRow: React.FC<TableRowProps> = ({
           <td 
             key={`${rowId}-${header.id}`}
             className={cn(
-              "p-3 border-b " + getAlignment(header),
+              "p-3 border-b",
+              getAlignment(header),
               freezeFirstColumn && isFirstCol && !withExpandableData && !selection && "sticky left-0 z-10",
               freezeFirstColumn && isFirstCol && !withExpandableData && !selection && striped && rowIndex % 2 === 1 && !isRowSelected
                 ? "bg-muted/50" 
