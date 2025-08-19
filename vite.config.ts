@@ -1,33 +1,33 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import { federation } from '@module-federation/vite';
-import path, { resolve } from 'path';
+import { federation } from "@module-federation/vite";
+import react from "@vitejs/plugin-react";
+import path from "path";
+import { defineConfig } from "vite";
 
 export default defineConfig({
   plugins: [
     react(),
     federation({
-      name: 'policies', // Make sure this matches your remote name
-      filename: 'remoteEntry.js',
+      name: "policies", // Make sure this matches your remote name
+      filename: "remoteEntry.js",
       exposes: {
-        './policies-management': './src/App.tsx',
-        './styles': './src/index.css',
-        './policiesUserStore': './src/store/userStore',
-        './hooks/useSwitchPoliciesLanguage': './src/hooks/useSwitchLanguage'
+        "./policies-management": "./src/App.tsx",
+        "./styles": "./src/index.css",
+        "./policiesUserStore": "./src/store/userStore",
+        "./hooks/useSwitchPoliciesLanguage": "./src/hooks/useSwitchLanguage",
       },
       shared: {
         react: { singleton: true },
-        'react-dom': { singleton: true },
-        'zustand': { singleton: true },
-        '@tanstack/react-query': { singleton: true },
+        "react-dom": { singleton: true },
+        zustand: { singleton: true },
+        "@tanstack/react-query": { singleton: true },
         // 'react-i18next': { singleton: true },
       },
     }),
   ],
   build: {
-    target: 'esnext',
+    target: "esnext",
     modulePreload: false,
-    rollupOptions: { output: { format: 'esm' } },
+    rollupOptions: { output: { format: "esm" } },
     minify: false,
     cssCodeSplit: true,
   },
@@ -36,4 +36,4 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-}); 
+});

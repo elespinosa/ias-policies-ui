@@ -21,7 +21,7 @@ export type User = {
 export enum UserRole {
   AGENT = "agent",
   COMPANY_ADMIN = "company_admin",
-  SYSTEM_ADMIN = "system_admin"
+  SYSTEM_ADMIN = "system_admin",
 }
 
 export type Customer = {
@@ -40,7 +40,7 @@ export enum CustomerStatus {
   LEAD = "lead",
   PROSPECT = "prospect",
   ACTIVE = "active",
-  INACTIVE = "inactive"
+  INACTIVE = "inactive",
 }
 
 export type Policy = {
@@ -62,7 +62,7 @@ export enum PolicyType {
   HEALTH = "health",
   LIFE = "life",
   BUSINESS = "business",
-  OTHER = "other"
+  OTHER = "other",
 }
 
 export enum PolicyStatus {
@@ -70,7 +70,7 @@ export enum PolicyStatus {
   ACTIVE = "active",
   EXPIRED = "expired",
   CANCELLED = "cancelled",
-  PENDING_RENEWAL = "pending_renewal"
+  PENDING_RENEWAL = "pending_renewal",
 }
 
 export type Claim = {
@@ -92,17 +92,20 @@ export enum ClaimStatus {
   APPROVED = "approved",
   PAID = "paid",
   DENIED = "denied",
-  CLOSED = "closed"
+  CLOSED = "closed",
 }
 
 export type PolicyListing = {
-  policyNo: string;
-  productLine: string;
-  clientName: string;
-  status: string;
-  policyTerm: string;
+  client: string;
+  id: number;
+  period: string;
+  policy_number: string;
   premium: number;
-}
+  provider: string;
+  status: string;
+  total_records: number;
+  type: string;
+};
 
 export type Activity = {
   id: string;
@@ -119,7 +122,7 @@ export enum EntityType {
   CUSTOMER = "customer",
   POLICY = "policy",
   CLAIM = "claim",
-  USER = "user"
+  USER = "user",
 }
 
 export interface ClaimListing {
@@ -146,15 +149,15 @@ export const MOCK_CURRENT_USER: User = {
   role: UserRole.COMPANY_ADMIN,
   tenantId: "t1",
   avatar: "https://i.pravatar.cc/150?img=1",
-  lastLogin: new Date()
+  lastLogin: new Date(),
 };
 
 export const MOCK_CURRENT_TENANT: Tenant = {
-  id: "t1", 
+  id: "t1",
   name: "Acme Insurance",
   logo: "",
   primaryColor: "#0EA5E9",
-  createdAt: new Date()
+  createdAt: new Date(),
 };
 
 export const MOCK_CUSTOMERS: Customer[] = [
@@ -167,7 +170,7 @@ export const MOCK_CUSTOMERS: Customer[] = [
     status: CustomerStatus.ACTIVE,
     assignedToId: "u1",
     tenantId: "t1",
-    createdAt: new Date(2023, 0, 15)
+    createdAt: new Date(2023, 0, 15),
   },
   {
     id: "c2",
@@ -176,7 +179,7 @@ export const MOCK_CUSTOMERS: Customer[] = [
     phone: "+1 234 567 8902",
     status: CustomerStatus.LEAD,
     tenantId: "t1",
-    createdAt: new Date(2023, 1, 20)
+    createdAt: new Date(2023, 1, 20),
   },
   {
     id: "c3",
@@ -187,7 +190,7 @@ export const MOCK_CUSTOMERS: Customer[] = [
     status: CustomerStatus.PROSPECT,
     assignedToId: "u1",
     tenantId: "t1",
-    createdAt: new Date(2023, 2, 5)
+    createdAt: new Date(2023, 2, 5),
   },
   {
     id: "c4",
@@ -198,7 +201,7 @@ export const MOCK_CUSTOMERS: Customer[] = [
     status: CustomerStatus.ACTIVE,
     assignedToId: "u1",
     tenantId: "t1",
-    createdAt: new Date(2023, 3, 10)
+    createdAt: new Date(2023, 3, 10),
   },
   {
     id: "c5",
@@ -207,8 +210,8 @@ export const MOCK_CUSTOMERS: Customer[] = [
     phone: "+1 234 567 8905",
     status: CustomerStatus.INACTIVE,
     tenantId: "t1",
-    createdAt: new Date(2023, 4, 25)
-  }
+    createdAt: new Date(2023, 4, 25),
+  },
 ];
 
 export const MOCK_POLICIES: Policy[] = [
@@ -219,10 +222,10 @@ export const MOCK_POLICIES: Policy[] = [
     customerId: "c1",
     startDate: new Date(2023, 0, 1),
     endDate: new Date(2023, 11, 31),
-    premium: 1200.00,
+    premium: 1200.0,
     status: PolicyStatus.ACTIVE,
     tenantId: "t1",
-    createdAt: new Date(2022, 11, 15)
+    createdAt: new Date(2022, 11, 15),
   },
   {
     id: "p2",
@@ -231,10 +234,10 @@ export const MOCK_POLICIES: Policy[] = [
     customerId: "c1",
     startDate: new Date(2023, 2, 1),
     endDate: new Date(2024, 1, 29),
-    premium: 950.00,
+    premium: 950.0,
     status: PolicyStatus.ACTIVE,
     tenantId: "t1",
-    createdAt: new Date(2023, 1, 15)
+    createdAt: new Date(2023, 1, 15),
   },
   {
     id: "p3",
@@ -243,10 +246,10 @@ export const MOCK_POLICIES: Policy[] = [
     customerId: "c3",
     startDate: new Date(2023, 3, 1),
     endDate: new Date(2024, 2, 31),
-    premium: 2500.00,
+    premium: 2500.0,
     status: PolicyStatus.ACTIVE,
     tenantId: "t1",
-    createdAt: new Date(2023, 2, 20)
+    createdAt: new Date(2023, 2, 20),
   },
   {
     id: "p4",
@@ -255,10 +258,10 @@ export const MOCK_POLICIES: Policy[] = [
     customerId: "c4",
     startDate: new Date(2023, 1, 1),
     endDate: new Date(2023, 12, 31),
-    premium: 3800.00,
+    premium: 3800.0,
     status: PolicyStatus.PENDING_RENEWAL,
     tenantId: "t1",
-    createdAt: new Date(2023, 0, 10)
+    createdAt: new Date(2023, 0, 10),
   },
   {
     id: "p5",
@@ -267,11 +270,11 @@ export const MOCK_POLICIES: Policy[] = [
     customerId: "c5",
     startDate: new Date(2023, 0, 1),
     endDate: new Date(2023, 5, 30),
-    premium: 870.00,
+    premium: 870.0,
     status: PolicyStatus.EXPIRED,
     tenantId: "t1",
-    createdAt: new Date(2022, 11, 20)
-  }
+    createdAt: new Date(2022, 11, 20),
+  },
 ];
 
 export const MOCK_CLAIMS: Claim[] = [
@@ -282,10 +285,10 @@ export const MOCK_CLAIMS: Claim[] = [
     customerId: "c1",
     dateOfIncident: new Date(2023, 3, 15),
     description: "Car accident on highway 101",
-    amount: 5000.00,
+    amount: 5000.0,
     status: ClaimStatus.APPROVED,
     tenantId: "t1",
-    createdAt: new Date(2023, 3, 16)
+    createdAt: new Date(2023, 3, 16),
   },
   {
     id: "cl2",
@@ -294,10 +297,10 @@ export const MOCK_CLAIMS: Claim[] = [
     customerId: "c1",
     dateOfIncident: new Date(2023, 5, 10),
     description: "Water damage from broken pipe",
-    amount: 2300.00,
+    amount: 2300.0,
     status: ClaimStatus.PAID,
     tenantId: "t1",
-    createdAt: new Date(2023, 5, 11)
+    createdAt: new Date(2023, 5, 11),
   },
   {
     id: "cl3",
@@ -306,11 +309,11 @@ export const MOCK_CLAIMS: Claim[] = [
     customerId: "c3",
     dateOfIncident: new Date(2023, 6, 5),
     description: "Business equipment theft",
-    amount: 8700.00,
+    amount: 8700.0,
     status: ClaimStatus.UNDER_REVIEW,
     tenantId: "t1",
-    createdAt: new Date(2023, 6, 7)
-  }
+    createdAt: new Date(2023, 6, 7),
+  },
 ];
 
 export const MOCK_ACTIVITIES: Activity[] = [
@@ -322,7 +325,7 @@ export const MOCK_ACTIVITIES: Activity[] = [
     action: "create",
     description: "Created new auto policy POL-001-2023",
     timestamp: new Date(2022, 11, 15, 10, 30),
-    tenantId: "t1"
+    tenantId: "t1",
   },
   {
     id: "a2",
@@ -332,7 +335,7 @@ export const MOCK_ACTIVITIES: Activity[] = [
     action: "create",
     description: "Added new lead Robert Johnson",
     timestamp: new Date(2023, 1, 20, 14, 15),
-    tenantId: "t1"
+    tenantId: "t1",
   },
   {
     id: "a3",
@@ -342,7 +345,7 @@ export const MOCK_ACTIVITIES: Activity[] = [
     action: "update",
     description: "Updated claim CLM-001-2023 status to Approved",
     timestamp: new Date(2023, 4, 5, 11, 45),
-    tenantId: "t1"
+    tenantId: "t1",
   },
   {
     id: "a4",
@@ -352,7 +355,7 @@ export const MOCK_ACTIVITIES: Activity[] = [
     action: "update",
     description: "Updated policy POL-004-2023 status to Pending Renewal",
     timestamp: new Date(2023, 6, 12, 9, 20),
-    tenantId: "t1"
+    tenantId: "t1",
   },
   {
     id: "a5",
@@ -362,6 +365,6 @@ export const MOCK_ACTIVITIES: Activity[] = [
     action: "update",
     description: "Updated claim CLM-002-2023 status to Paid",
     timestamp: new Date(2023, 6, 18, 16, 30),
-    tenantId: "t1"
-  }
+    tenantId: "t1",
+  },
 ];

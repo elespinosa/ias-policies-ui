@@ -1,7 +1,15 @@
-import { useQuery } from '@tanstack/react-query';
-import { fetchPolicies, fetchPolicy, preparePolicyData, 
-  
-  getTotalPolicies, fetchPolicyStatus, fetchPolicyMetrics, fetchPolicyProviders } from '@/services/policyServices';
+import { PolicyListing } from "@/lib/types";
+import {
+  fetchPolicies,
+  fetchPolicy,
+  fetchPolicyMetrics,
+  fetchPolicyProductsByType,
+  fetchPolicyProviders,
+  fetchPolicyStatus,
+  fetchPolicyTypes,
+  preparePolicyData,
+} from "@/services/policyServices";
+import { useQuery } from "@tanstack/react-query";
 
 // Common types
 export interface PolicyQueryConfig {
@@ -14,7 +22,7 @@ export interface PolicyQueryConfig {
 const defaultConfig: PolicyQueryConfig = {
   staleTime: 1000 * 60 * 5, // 5 minutes
   gcTime: 1000 * 60 * 10, // 10 minutes
-  retry: false
+  retry: false,
 };
 
 // Policy listing query
@@ -27,88 +35,110 @@ export const usePolicyListingQuery = (
   config?: PolicyQueryConfig
 ) => {
   return useQuery({
-    queryKey: ['policies', searchValue, status, provider, page, rowsPerPage],
+    queryKey: ["policies", searchValue, status, provider, page, rowsPerPage],
     queryFn: async () => {
-      const response = await fetchPolicies(searchValue, status, provider, page, rowsPerPage);
-      return preparePolicyData(response);
+      const response = await fetchPolicies(
+        searchValue,
+        status,
+        provider,
+        page,
+        rowsPerPage
+      );
+      return preparePolicyData(response) as PolicyListing[];
     },
     enabled: true,
     ...defaultConfig,
-    ...config
+    ...config,
   });
 };
 
 // Policy detail query
 export const usePolicyDetailQuery = (
-  policyId: string,
+  policyId: string | number,
   config?: PolicyQueryConfig
 ) => {
   return useQuery({
-    queryKey: ['policyDetail', policyId],
+    queryKey: ["policyDetail", policyId],
     queryFn: async () => {
       const response = await fetchPolicy(policyId);
       return response;
     },
     enabled: !!policyId,
     ...defaultConfig,
-    ...config
+    ...config,
   });
 };
 
 // Policy status query
-export const usePolicyStatusQuery = (
-  config?: PolicyQueryConfig
-) => {
+export const usePolicyStatusQuery = (config?: PolicyQueryConfig) => {
   return useQuery({
-    queryKey: ['policiesStatus'],
-    queryFn: async () => {      
-        const response = await fetchPolicyStatus();
-        return response;
+    queryKey: ["policiesStatus"],
+    queryFn: async () => {
+      const response = await fetchPolicyStatus();
+      return response;
     },
-    enabled: true, 
+    enabled: true,
     ...defaultConfig,
-    ...config
+    ...config,
   });
 };
 
 // Policy providers query
-export const usePolicyProvidersQuery = (
-  config?: PolicyQueryConfig
-) => {
+export const usePolicyProvidersQuery = (config?: PolicyQueryConfig) => {
   return useQuery({
-    queryKey: ['policyProviders'],
+    queryKey: ["policyProviders"],
     queryFn: async () => {
       const response = await fetchPolicyProviders();
       return response;
     },
     enabled: true,
     ...defaultConfig,
-    ...config
+    ...config,
   });
 };
 
 // Policy metrics query
-export const usePolicyMetricsQuery = (
-  config?: PolicyQueryConfig
-) => {
+export const usePolicyMetricsQuery = (config?: PolicyQueryConfig) => {
   return useQuery({
-    queryKey: ['policiesMetrics'],  
+    queryKey: ["policiesMetrics"],
     queryFn: async () => {
       const response = await fetchPolicyMetrics();
       return response;
     },
     enabled: true,
     ...defaultConfig,
-    ...config
+    ...config,
   });
 };
 
+// Policy types query
+export const usePolicyTypesQuery = (config?: PolicyQueryConfig) => {
+  return useQuery({
+    queryKey: ["policiesTypes"],
+    queryFn: fetchPolicyTypes,
+    enabled: true,
+    ...defaultConfig,
+    ...config,
+  });
+};
+
+// Policy provider per type
+export const usePolicyProductsByTypeQuery = (
+  type?: string,
+  config?: PolicyQueryConfig
+) => {
+  return useQuery({
+    queryKey: ["fetchPolicyProductsByType", type],
+    queryFn: async () => {
+      const response = await fetchPolicyProductsByType(type);
+      return response;
+    },
+    enabled: true,
+    ...defaultConfig,
+    ...config,
+  });
+};
 // Helper function for getting policy table options
 // export const getPolicyTableOptions = (provider: string) => {
 //   return getTableOptions(provider);
 // };
-
-// Helper function for getting total policy count
-export const getPolicyTotalCount = (policyList: any[]) => {
-  return getTotalPolicies(policyList);
-};

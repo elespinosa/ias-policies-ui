@@ -1,18 +1,18 @@
-import React from 'react';
 import {
-  AlertDialog as AlertDialogPrimitive,
   AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
+  AlertDialog as AlertDialogPrimitive,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import React from "react";
 
-export type AlertDialogVariant = 'default' | 'destructive' | 'warning';
+export type AlertDialogVariant = "default" | "destructive" | "warning";
 
 export interface AlertDialogProps {
   /** Whether the alert dialog is open */
@@ -40,9 +40,10 @@ export interface AlertDialogProps {
 }
 
 const variantButtonStyles: Record<AlertDialogVariant, string> = {
-  default: 'bg-primary text-primary-foreground hover:bg-primary/90',
-  destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
-  warning: 'bg-yellow-500 text-yellow-foreground hover:bg-yellow-500/90',
+  default: "bg-primary text-primary-foreground hover:bg-primary/90",
+  destructive:
+    "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+  warning: "bg-yellow-500 text-yellow-foreground hover:bg-yellow-500/90",
 };
 
 const AlertDialog: React.FC<AlertDialogProps> = ({
@@ -50,9 +51,9 @@ const AlertDialog: React.FC<AlertDialogProps> = ({
   onClose,
   title,
   description,
-  variant = 'default',
-  confirmText = 'Confirm',
-  cancelText = 'Cancel',
+  variant = "default",
+  confirmText = "Confirm",
+  cancelText = "Cancel",
   onConfirm,
   onCancel,
   className,
@@ -70,18 +71,18 @@ const AlertDialog: React.FC<AlertDialogProps> = ({
       <AlertDialogContent className={cn("bg-background", className)}>
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>
-          <AlertDialogDescription>
-            {description}
-          </AlertDialogDescription>
+          <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           {!hideCancel && (
             <AlertDialogCancel asChild>
-              <Button variant="outline" onClick={handleCancel}>{cancelText}</Button>
+              <Button variant="outline" onClick={handleCancel}>
+                {cancelText}
+              </Button>
             </AlertDialogCancel>
           )}
           <AlertDialogAction asChild>
-            <Button 
+            <Button
               className={cn(variantButtonStyles[variant])}
               onClick={onConfirm}
             >
@@ -97,10 +98,9 @@ const AlertDialog: React.FC<AlertDialogProps> = ({
 // Example usage component
 export const AlertDialogExample: React.FC = () => {
   const [isOpen, setIsOpen] = React.useState(false);
-  const [variant, setVariant] = React.useState<AlertDialogVariant>('default');
+  const [variant, setVariant] = React.useState<AlertDialogVariant>("default");
 
   const handleConfirm = () => {
-    console.log('Confirmed!');
     setIsOpen(false);
   };
 
@@ -109,7 +109,7 @@ export const AlertDialogExample: React.FC = () => {
       <div className="flex gap-2">
         <button
           onClick={() => {
-            setVariant('default');
+            setVariant("default");
             setIsOpen(true);
           }}
           className="px-4 py-2 bg-primary text-primary-foreground rounded-md"
@@ -118,7 +118,7 @@ export const AlertDialogExample: React.FC = () => {
         </button>
         <button
           onClick={() => {
-            setVariant('destructive');
+            setVariant("destructive");
             setIsOpen(true);
           }}
           className="px-4 py-2 bg-destructive text-destructive-foreground rounded-md"
@@ -127,7 +127,7 @@ export const AlertDialogExample: React.FC = () => {
         </button>
         <button
           onClick={() => {
-            setVariant('warning');
+            setVariant("warning");
             setIsOpen(true);
           }}
           className="px-4 py-2 bg-yellow-500 text-yellow-foreground rounded-md"
@@ -139,20 +139,28 @@ export const AlertDialogExample: React.FC = () => {
       <AlertDialog
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
-        title={`${variant.charAt(0).toUpperCase() + variant.slice(1)} Action Required`}
+        title={`${
+          variant.charAt(0).toUpperCase() + variant.slice(1)
+        } Action Required`}
         description={
-          variant === 'default'
-            ? 'Are you sure you want to proceed with this action?'
-            : variant === 'destructive'
-            ? 'This action cannot be undone. This will permanently delete your account and remove your data from our servers.'
-            : 'Please review this action carefully before proceeding.'
+          variant === "default"
+            ? "Are you sure you want to proceed with this action?"
+            : variant === "destructive"
+            ? "This action cannot be undone. This will permanently delete your account and remove your data from our servers."
+            : "Please review this action carefully before proceeding."
         }
         variant={variant}
-        confirmText={variant === 'default' ? 'Continue' : variant === 'destructive' ? 'Delete' : 'Proceed'}
+        confirmText={
+          variant === "default"
+            ? "Continue"
+            : variant === "destructive"
+            ? "Delete"
+            : "Proceed"
+        }
         onConfirm={handleConfirm}
       />
     </div>
   );
 };
 
-export default AlertDialog; 
+export default AlertDialog;

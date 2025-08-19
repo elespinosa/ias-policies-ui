@@ -1,9 +1,9 @@
-import React, { useRef } from 'react';
-import { TableProps } from './TableTypes';
-import TableHeader from './TableHeader';
-import TableBody from './TableBody';
-import TablePagination from './TablePagination';
-import { TableProvider } from './TableContext';
+import React, { useRef } from "react";
+import TableBody from "./TableBody";
+import { TableProvider } from "./TableContext";
+import TableHeader from "./TableHeader";
+import TablePagination from "./TablePagination";
+import { TableProps } from "./TableTypes";
 
 const DataTable: React.FC<TableProps> = ({
   id,
@@ -35,7 +35,7 @@ const DataTable: React.FC<TableProps> = ({
 }) => {
   const tableRef = useRef<HTMLDivElement>(null);
   const effectiveTotalRows = totalRows || data.length;
-  
+
   return (
     <TableProvider
       headers={headers}
@@ -53,16 +53,16 @@ const DataTable: React.FC<TableProps> = ({
       onRowAction={onRowAction}
       hideIfNull={hideIfNull}
     >
-      <div className="w-full" data-testid={`table-${id}`}>
+      <div className=" here w-full" data-testid={`table-${id}`}>
         {name && <h2 className="text-xl font-semibold mb-4">{name}</h2>}
-        
-        <div 
+
+        <div
           ref={tableRef}
-          className="relative overflow-auto border rounded-md"
-          style={{ maxHeight: stickyHeader ? '40vh' : 'auto' }}
+          className="notsricky relative overflow-auto border rounded-md"
+          style={{ maxHeight: stickyHeader ? "40vh" : "auto" }}
         >
-          <table className="w-full border-collapse">
-            <TableHeader 
+          <table className="w-full border-collapse text-sm">
+            <TableHeader
               headers={headers}
               sortable={sortable}
               stickyHeader={stickyHeader}
@@ -71,8 +71,8 @@ const DataTable: React.FC<TableProps> = ({
               freezeFirstColumn={freezeFirstColumn}
               withExpandableData={withExpandableData}
             />
-            
-            <TableBody 
+
+            <TableBody
               headers={headers}
               showId={showId}
               selection={selection}
@@ -84,8 +84,8 @@ const DataTable: React.FC<TableProps> = ({
             />
           </table>
         </div>
-        
-        {showPagination && (rowsPerPage > 0 && effectiveTotalRows > 0) && (
+
+        {showPagination && rowsPerPage > 0 && effectiveTotalRows > 0 && (
           <TablePagination
             totalRows={effectiveTotalRows}
             showRowsPerPage={showRowsPerPage}

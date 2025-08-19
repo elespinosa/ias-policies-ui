@@ -1,0 +1,44 @@
+CREATE OR REPLACE
+    ALGORITHM = UNDEFINED 
+    DEFINER = `root`@`localhost` 
+    SQL SECURITY DEFINER
+VIEW `policy_listing_v` AS
+    SELECT 
+        `a`.`id` AS `id`,
+        `a`.`client_id` AS `client_id`,
+        `a`.`policy_number` AS `policy_number`,
+        `b`.`type` AS `type`,
+        `c`.`client_type` AS `client_type`,
+        `c`.`first_name` AS `first_name`,
+        `c`.`last_name` AS `last_name`,
+        `c`.`company_name` AS `company_name`,
+        (CASE
+            WHEN (`c`.`client_type` = 'individual') THEN CONCAT(`c`.`first_name`, ' ', `c`.`last_name`)
+            ELSE `c`.`company_name`
+        END) AS `client_name`,
+        `a`.`status` AS `status`,
+        `a`.`effective_date` AS `effective_date`,
+        `a`.`expiration_date` AS `expiration_date`,
+        `a`.`premium_amount` AS `premium`,
+        `a`.`coverage_amount` AS `coverage`,
+        `a`.`deductible_amount` AS `deductible`,
+        `a`.`cancellation_date` AS `cancellation_date`,
+        `a`.`cancellation_reason` AS `cancellation_reason`,
+        `a`.`payment_frequency` AS `payment_terms`,
+        `a`.`auto_renewal` AS `auto_renewal`,
+        `a`.`agent_id` AS `agent_id`,
+        `a`.`underwriting_notes` AS `notes`,
+        `a`.`created_at` AS `date_created`,
+        `a`.`updated_at` AS `updated_at`,
+        `c`.`preferred_communication` AS `preferred_communication`,
+        `c`.`billing_address` AS `billing_address`,
+        `c`.`mobile_phone` AS `mobile_phone`,
+        `c`.`landline_phone` AS `landline_phone`,
+        `c`.`email` AS `email`,
+        `d`.`partner_name` AS `partner_name`,
+        `d`.`id` AS `partner_id`
+    FROM
+        (((`policies` `a`
+        LEFT JOIN `insurance_products` `b` ON ((`a`.`product_id` = `b`.`id`)))
+        LEFT JOIN `clients` `c` ON ((`a`.`client_id` = `c`.`id`)))
+        LEFT JOIN `partners` `d` ON ((`b`.`partner_id` = `d`.`id`)))

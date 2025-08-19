@@ -1,9 +1,9 @@
-import React from 'react';
 import { Checkbox } from "@/components/ui/checkbox";
-import { ChevronDown, ChevronUp } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { useTableContext } from './TableContext';
-import TableAction from './TableAction';
+import { cn } from "@/lib/utils";
+import { ChevronDown, ChevronUp } from "lucide-react";
+import React from "react";
+import TableAction from "./TableAction";
+import { useTableContext } from "./TableContext";
 
 interface TableRowProps {
   row: any;
@@ -34,15 +34,15 @@ const TableRow: React.FC<TableRowProps> = ({
   freezeFirstColumn,
   withExpandableData,
   isRowExpanded,
-  hideIfNull
+  hideIfNull,
 }) => {
   const { handleRowSelect, handleRowExpand } = useTableContext();
-  
+
   const rowId = String(row.id);
 
   const getAlignment = (val: any) => {
     if (!val || !val.align) return "";
-    
+
     switch (val.align) {
       case "left":
         return "text-left";
@@ -53,28 +53,34 @@ const TableRow: React.FC<TableRowProps> = ({
       default:
         return "";
     }
-  }
+  };
 
   return (
-    <tr 
+    <tr
       className={cn(
         striped && rowIndex % 2 === 1 ? "bg-muted/50" : "",
-        isRowSelected ? "bg-primary/20 hover:bg-primary/30" : "hover:bg-muted/30",
+        isRowSelected
+          ? "bg-primary/20 hover:bg-primary/30"
+          : "hover:bg-muted/30",
         isRowDisabled ? "opacity-50 bg-muted/30" : "",
         "transition-colors cursor-pointer"
       )}
       onClick={() => selection && !isRowDisabled && handleRowSelect(rowId, row)}
     >
       {(selection || withExpandableData) && (
-        <td className={cn(
-          "p-3 border-b align-middle",
-          freezeFirstColumn && "sticky left-0 z-10",
-          striped && rowIndex % 2 === 1 && !isRowSelected ? "bg-muted/50" : "bg-background",
-          isRowSelected ? "bg-primary/20" : ""
-        )}>
+        <td
+          className={cn(
+            "p-3 border-b align-middle",
+            freezeFirstColumn && "sticky left-0 z-10",
+            striped && rowIndex % 2 === 1 && !isRowSelected
+              ? "bg-muted/50"
+              : "bg-background",
+            isRowSelected ? "bg-primary/20" : ""
+          )}
+        >
           <div className="flex items-center gap-2">
             {selection && (
-              <Checkbox 
+              <Checkbox
                 checked={isRowSelected}
                 disabled={isRowDisabled}
                 onCheckedChange={() => handleRowSelect(rowId, row)}
@@ -82,7 +88,7 @@ const TableRow: React.FC<TableRowProps> = ({
               />
             )}
             {withExpandableData && (
-              <button 
+              <button
                 className="p-1 rounded-full hover:bg-muted-foreground/20 focus:outline-none"
                 onClick={(e) => handleRowExpand(e, rowId)}
                 aria-label={isRowExpanded ? "Collapse row" : "Expand row"}
@@ -97,51 +103,92 @@ const TableRow: React.FC<TableRowProps> = ({
           </div>
         </td>
       )}
-      
+
       {headers.map((header, colIndex) => {
         const isFirstCol = colIndex === 0;
         let cellContent;
-        
+
         if (header.render) {
           cellContent = header.render(row);
         } else if (header.accessor) {
-          const keys = typeof header.accessor === 'string' ? header.accessor.split('.') : [];
+          const keys =
+            typeof header.accessor === "string"
+              ? header.accessor.split(".")
+              : [];
           let value = row;
-          
+
           for (const key of keys) {
             value = value?.[key];
             if (value === undefined) break;
           }
-          
-          cellContent = value !== undefined && value !== null ? String(value) : hideIfNull ? '' : value;
+
+          cellContent =
+            value !== undefined && value !== null
+              ? String(value)
+              : hideIfNull
+              ? ""
+              : value;
         } else {
-          cellContent = row[header.id] !== undefined ? String(row[header.id]) : '';
+          cellContent =
+            row[header.id] !== undefined ? String(row[header.id]) : "";
         }
 
-        if(!showId && (header.id.toLowerCase() === 'id' || header.id.toLowerCase() === 'rowno')) {
+        if (
+          !showId &&
+          (header.id.toLowerCase() === "id" ||
+            header.id.toLowerCase() === "rowno")
+        ) {
           return null;
         }
-        // console.log(header.id, getAlignment(header));
+
         return (
-          <td 
+          <td
             key={`${rowId}-${header.id}`}
             className={cn(
               "p-3 border-b",
               getAlignment(header),
-              freezeFirstColumn && isFirstCol && !withExpandableData && !selection && "sticky left-0 z-10",
-              freezeFirstColumn && isFirstCol && !withExpandableData && !selection && striped && rowIndex % 2 === 1 && !isRowSelected
-                ? "bg-muted/50" 
-                : freezeFirstColumn && isFirstCol && !withExpandableData && !selection && !isRowSelected ? "bg-background" : "",
-              freezeFirstColumn && isFirstCol && !withExpandableData && !selection && isRowSelected ? "bg-primary/20" : ""
+              freezeFirstColumn &&
+                isFirstCol &&
+                !withExpandableData &&
+                !selection &&
+                "sticky left-0 z-10",
+              freezeFirstColumn &&
+                isFirstCol &&
+                !withExpandableData &&
+                !selection &&
+                striped &&
+                rowIndex % 2 === 1 &&
+                !isRowSelected
+                ? "bg-muted/50"
+                : freezeFirstColumn &&
+                  isFirstCol &&
+                  !withExpandableData &&
+                  !selection &&
+                  !isRowSelected
+                ? "bg-background"
+                : "",
+              freezeFirstColumn &&
+                isFirstCol &&
+                !withExpandableData &&
+                !selection &&
+                isRowSelected
+                ? "bg-primary/20"
+                : ""
             )}
           >
-            <div className={cn(
-              "whitespace-pre-wrap break-words hyphens-auto overflow-hidden text-ellipsis min-w-[100px] max-w-[300px]",
-              header.id.toLowerCase() === 'status' ? "w-fit whitespace-nowrap" : "",
-              header.id.toLowerCase().includes('date') ? "min-w-[120px] whitespace-nowrap" : ""
-            )}>
+            <div
+              className={cn(
+                "whitespace-pre-wrap break-words hyphens-auto overflow-hidden text-ellipsis min-w-[100px] max-w-[300px]",
+                header.id.toLowerCase() === "status"
+                  ? "w-fit whitespace-nowrap"
+                  : "",
+                header.id.toLowerCase().includes("date")
+                  ? "min-w-[120px] whitespace-nowrap"
+                  : ""
+              )}
+            >
               {cellContent}
-            </div> 
+            </div>
           </td>
         );
       })}
@@ -152,5 +199,5 @@ const TableRow: React.FC<TableRowProps> = ({
       )}
     </tr>
   );
-};export default TableRow;
-
+};
+export default TableRow;

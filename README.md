@@ -1,287 +1,301 @@
-# Insurance Agency - Policy
+# Insurance Policies UI
 
-A modern Insurance Agency System (IAS) web application for policy management, built with Vite, React, and TypeScript.
+A modern, responsive web application for managing insurance policies, built with React, TypeScript, and Tailwind CSS. This application provides a comprehensive interface for insurance agents and administrators to manage policies, claims, payments, and renewals.
 
-## Overview
+## 🌟 Features
 
-This application provides a comprehensive interface for managing insurance policies, including policy creation, viewing, editing, and administration. It features a modern UI with dark/light theme support and multi-language capabilities.
+### Core Functionality
 
-## Technologies
+- **Policy Management**: Create, edit, view, and cancel insurance policies
+- **Claims Processing**: Submit and manage insurance claims with document uploads
+- **Payment Tracking**: Mark payments as collected and manage payment documents
+- **Renewal Management**: Track policies due for renewal
+- **Multi-language Support**: Internationalization (i18n) with 9 languages
 
-- **Frontend Framework**: React 18 with TypeScript
-- **Build Tool**: Vite
-- **Styling**: Tailwind CSS
-- **UI Components**: shadcn/ui
-- **State Management**: Zustand
-- **HTTP Client**: Axios with React Query
-- **Internationalization**: i18next
-- **Form Handling**: React Hook Form with Zod validation
-- **Package Manager**: npm/bun
+### User Interface
 
-## Features
-
-- 📋 **Policy Management**: Create, view, edit, and delete insurance policies
-- 🎨 **Theme Support**: Light, dark, and system theme modes
-- 🌍 **Multi-language**: Support for 9 languages
-- 📱 **Responsive Design**: Mobile-first responsive UI
-- 🔍 **Advanced Search**: Policy search and filtering capabilities
-- 📊 **Dashboard Metrics**: Policy statistics and analytics
-- 🛡️ **Role-based Access**: Permission-based feature access
-- ⚡ **Performance**: Optimized with React Query caching
-
-## Getting Started
-
-### Prerequisites
-
-- Node.js 18+ (recommended to install via [nvm](https://github.com/nvm-sh/nvm#installing-and-updating))
-- npm or bun package manager
-
-### Installation
-
-```sh
-# Clone the repository
-git clone <repository-url>
-cd ias-policies-ui
-
-# Install dependencies
-npm install
-# or
-bun install
-
-# Start development server
-npm run dev
-# or
-bun dev
-```
-
-The application will be available at `http://localhost:5173`
-
-### Development Scripts
-
-```sh
-# Development server
-npm run dev
-
-# Build for production
-npm run build
-
-# Preview production build
-npm run preview
-
-# Run linter
-npm run lint
-
-# Type checking
-npm run type-check
-```
-
-## Project Structure
-
-```
-src/
-├── components/          # Reusable UI components
-│   ├── common/         # Policy-specific components
-│   ├── customUI/       # Custom UI components
-│   └── ui/            # shadcn/ui components
-├── context/           # React context providers
-├── functions/         # Utility functions
-├── hooks/            # Custom React hooks
-│   ├── mutations/    # React Query mutations
-│   └── queries/      # React Query queries
-├── lib/              # Core utilities and configurations
-├── pages/            # Page components
-├── services/         # API service functions
-├── store/            # Zustand stores
-├── translations/     # i18n translation files
-└── types/           # TypeScript type definitions
-```
-
-## Key Components
-
-### Policy Management
-- **PolicyCard**: Display policy summary information
-- **PolicyTable**: Tabular view of policies with sorting and filtering
-- **PolicyCreationModal**: Form for creating new policies
-- **PolicyDetailView**: Detailed view of individual policies
-- **PolicyUploadModal**: Bulk policy upload interface
-
-### Data Management
-- **DataTable**: Reusable data table with pagination and search
-- **MetricCards**: Dashboard statistics display
-- **SearchBox**: Advanced search functionality
-
-## API Integration
-
-The application integrates with backend services through:
-- `policyServices.ts`: Policy CRUD operations
-- `authServices.ts`: Authentication and authorization
-- `commonServices.ts`: Shared utility services
-- `partnerServices.ts`: Partner management
-
-All API calls are handled with React Query for caching and state management.
-
-## Theme System
-
-The application supports comprehensive theming with:
-- Light, dark, and system preference modes
-- Smooth theme transitions
-- Persistent theme preferences
-- Host application integration support
-
-### Theme Usage
-
-```typescript
-import { useTheme } from '@/lib/theme-context';
-
-function MyComponent() {
-  const { theme, setTheme, resolvedTheme } = useTheme();
-  
-  return (
-    <button onClick={() => setTheme('dark')}>
-      Current theme: {resolvedTheme}
-    </button>
-  );
-}
-```
-
-### Host Integration
-
-For micro-frontend scenarios:
-
-```typescript
-// Access theme from host application
-const remoteTheme = window.__REMOTE_THEME__;
-
-// Get/set theme
-const currentTheme = remoteTheme?.getTheme();
-remoteTheme?.setTheme('dark');
-```
-
-## Internationalization (i18n)
+- **Responsive Design**: Mobile-first approach with modern UI components
+- **Data Tables**: Advanced data tables with sorting, filtering, and pagination
+- **Modal Forms**: Intuitive forms for policy creation and editing
+- **Real-time Updates**: Live data updates and notifications
+- **Dark/Light Theme**: Toggle between light and dark themes
 
 ### Supported Languages
 
-The application supports 9 languages:
-- 🇺🇸 English (en) - Default
+- 🇺🇸 English (en)
+- 🇸🇦 Arabic (ar)
+- 🇩🇪 German (de)
 - 🇪🇸 Spanish (es)
 - 🇫🇷 French (fr)
-- 🇩🇪 German (de)
-- 🇸🇦 Arabic (ar)
-- 🇻🇳 Vietnamese (vi)
 - 🇯🇵 Japanese (ja)
 - 🇰🇷 Korean (ko)
+- 🇻🇳 Vietnamese (vi)
 - 🇨🇳 Chinese (zh)
 
-### Translation Structure
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js (v16 or higher)
+- npm, yarn, or bun package manager
+- Modern web browser
+
+### Installation
+
+1. **Clone the repository**
+
+   ```bash
+   git clone <repository-url>
+   cd ias-policies-ui
+   ```
+
+2. **Install dependencies**
+
+   ```bash
+   # Using npm
+   npm install
+
+   # Using yarn
+   yarn install
+
+   # Using bun
+   bun install
+   ```
+
+3. **Start the development server**
+
+   ```bash
+   # Using npm
+   npm run dev
+
+   # Using yarn
+   yarn dev
+
+   # Using bun
+   bun dev
+   ```
+
+4. **Open your browser**
+   Navigate to `http://localhost:5173` (or the port shown in your terminal)
+
+## 🏗️ Project Structure
 
 ```
-src/translations/
-├── en/common.json
-├── es/common.json
-├── fr/common.json
-└── ...
+src/
+├── components/           # React components
+│   ├── common/          # Common UI components
+│   ├── customUI/        # Custom UI components
+│   └── ui/              # Base UI components (shadcn/ui)
+├── context/             # React context providers
+├── functions/           # Utility functions and actions
+├── hooks/               # Custom React hooks
+├── interfaces/          # TypeScript interfaces
+├── lib/                 # Library configurations
+├── pages/               # Page components
+├── services/            # API services
+├── store/               # State management
+└── translations/        # Internationalization files
+    ├── en/              # English
+    ├── ar/              # Arabic
+    ├── de/              # German
+    ├── es/              # Spanish
+    ├── fr/              # French
+    ├── ja/              # Japanese
+    ├── ko/              # Korean
+    ├── vi/              # Vietnamese
+    └── zh/              # Chinese
 ```
 
-### Using Translations
+## 🎨 UI Components
 
-```typescript
-import { useTranslation } from 'react-i18next';
+### Custom Components
 
-function MyComponent() {
-  const { t, i18n } = useTranslation();
-  
-  return (
-    <div>
-      <h1>{t('common.title')}</h1>
-      <button onClick={() => i18n.changeLanguage('es')}>
-        Español
-      </button>
-    </div>
-  );
-}
-```
+- **DataTable**: Advanced data table with sorting, filtering, and pagination
+- **Modal**: Reusable modal dialogs for forms and confirmations
+- **SearchBox**: Intelligent search with autocomplete
+- **MetricCards**: Dashboard metrics display
+- **PolicyCards**: Policy information display
+- **DocumentUpload**: File upload with drag & drop support
 
-### Translation Namespaces
+### Base Components (shadcn/ui)
+
+- **Button**: Various button styles and variants
+- **Input**: Form input fields
+- **Select**: Dropdown selection components
+- **Card**: Content containers
+- **Dialog**: Modal dialogs
+- **Table**: Data table components
+- **Toast**: Notification system
+
+## 🌐 Internationalization
+
+The application supports multiple languages through a comprehensive translation system:
+
+### Adding New Languages
+
+1. Create a new folder in `src/translations/` (e.g., `it/` for Italian)
+2. Copy the structure from `en/common.json`
+3. Translate all values to the target language
+4. Update the language configuration in `src/lib/i18n.ts`
+
+### Translation Keys
+
+All user-facing text is stored in translation files with organized sections:
 
 - `common`: General UI elements
-- `messages`: System notifications
-- `status`: Status indicators
-- `table`: Table-related text
-- `types`: Entity types
+- `messages`: System messages and notifications
+- `headers`: Table column headers
+- `claims`: Claims-related text
+- `policies`: Policy management text
 - `validations`: Form validation messages
 
-## Authentication & Authorization
-
-The application includes:
-- JWT-based authentication
-- Role-based access control
-- Permission checking utilities
-- CSRF protection
-- Secure API communication
-
-## State Management
-
-- **Theme Store**: Theme preferences and settings
-- **User Store**: User authentication and profile data
-- **React Query**: Server state caching and synchronization
-
-## Development Guidelines
-
-### Code Style
-- TypeScript strict mode enabled
-- ESLint configuration for code quality
-- Consistent component structure
-- Custom hooks for reusable logic
-
-### Component Structure
-```typescript
-// Component template
-interface ComponentProps {
-  // Props definition
-}
-
-export function Component({ ...props }: ComponentProps) {
-  // Hooks
-  // State
-  // Effects
-  // Handlers
-  // Render
-}
-```
-
-## Deployment
-
-### Build Process
-```sh
-npm run build
-```
-
-### Deployment Targets
-- Static hosting services (Netlify, Vercel)
-- CDN deployment
-- Docker containerization
-- Micro-frontend integration
+## 🔧 Configuration
 
 ### Environment Variables
 
-Create a `.env` file for local development:
+Create a `.env` file in the root directory:
+
 ```env
-VITE_API_BASE_URL=http://localhost:3000/api
-VITE_APP_TITLE=IAS Policies UI
+VITE_API_BASE_URL=your_api_base_url
+VITE_CSRF_TOKEN_ENDPOINT=your_csrf_endpoint
 ```
 
-## Contributing
+### Tailwind CSS
+
+The project uses Tailwind CSS for styling. Configuration can be found in:
+
+- `tailwind.config.ts` - Main configuration
+- `postcss.config.js` - PostCSS configuration
+
+### Vite Configuration
+
+Build and development configuration in `vite.config.ts`:
+
+- React plugin configuration
+- Build optimization
+- Development server settings
+
+## 📱 Responsive Design
+
+The application is built with a mobile-first approach:
+
+- **Mobile**: Optimized for small screens with touch-friendly controls
+- **Tablet**: Adaptive layouts for medium-sized screens
+- **Desktop**: Full-featured interface with advanced controls
+
+## 🎯 Key Features
+
+### Policy Management
+
+- Create new insurance policies
+- Edit existing policy details
+- Cancel policies with reason tracking
+- Policy status management
+- Document attachment support
+
+### Claims System
+
+- Submit new claims
+- Upload supporting documents
+- Track claim status
+- Multiple claim types support
+
+### Payment Processing
+
+- Mark payments as collected
+- Reference number tracking
+- Payment document management
+- Payment history
+
+### Dashboard & Analytics
+
+- Policy count metrics
+- Premium tracking
+- Renewal alerts
+- Performance indicators
+
+## 🚀 Build & Deployment
+
+### Development Build
+
+```bash
+npm run build:dev
+```
+
+### Production Build
+
+```bash
+npm run build
+```
+
+### Preview Production Build
+
+```bash
+npm run preview
+```
+
+### Linting
+
+```bash
+npm run lint
+```
+
+## 🧪 Testing
+
+The project includes comprehensive testing setup:
+
+- Unit tests for components
+- Integration tests for workflows
+- E2E tests for critical paths
+
+Run tests with:
+
+```bash
+npm run test
+```
+
+## 🤝 Contributing
 
 1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-## License
+### Code Style
 
-[Add your license information here]
+- Use TypeScript for all new code
+- Follow ESLint configuration
+- Use Prettier for code formatting
+- Write meaningful commit messages
 
-## Support
+## 📄 License
 
-For support and questions, please contact the development team or create an issue in the repository.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🆘 Support
+
+For support and questions:
+
+- Create an issue in the repository
+- Contact the development team
+- Check the documentation
+
+## 🔄 Version History
+
+- **v1.0.0** - Initial release with core policy management features
+- **v1.1.0** - Added multi-language support
+- **v1.2.0** - Enhanced UI components and responsive design
+- **v1.3.0** - Claims and payment system integration
+
+## 🙏 Acknowledgments
+
+- Built with [React](https://reactjs.org/)
+- Styled with [Tailwind CSS](https://tailwindcss.com/)
+- UI components from [shadcn/ui](https://ui.shadcn.com/)
+- Built with [Vite](https://vitejs.dev/)
+- Internationalization with [i18next](https://www.i18next.com/)
+
+---
+
+**Note**: This is a development version. For production use, ensure proper security measures, error handling, and testing are implemented.
