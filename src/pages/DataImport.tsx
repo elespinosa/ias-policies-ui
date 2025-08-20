@@ -283,12 +283,10 @@ export const DataImport: React.FC = () => {
   const handleStartOver = () => {
     setCurrentStep(1);
     setFileData(null);
-    setSelectedTable(null);
     setMappings([]);
     setImportResult(null);
     setIsImporting(false);
     setSelectedTemplate(null);
-    // setReturnedFromTableSelection(false);
   };
 
   const handleImportAnotherFile = () => {
