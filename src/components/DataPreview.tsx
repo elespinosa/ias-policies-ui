@@ -152,7 +152,6 @@ export const DataPreview: React.FC<DataPreviewProps> = ({
               break;
             case "DATETIME":
             case "TIMESTAMP":
-              console.log({ valueStr, name: column.name });
               finalValue = new Date(valueStr).toISOString();
               break;
             default:
@@ -207,7 +206,6 @@ export const DataPreview: React.FC<DataPreviewProps> = ({
 
   const handleStartImport = () => {
     const preparedData = prepareDataForSubmission();
-    console.log("Prepared data for submission:", preparedData);
     onStartImport(preparedData);
   };
 

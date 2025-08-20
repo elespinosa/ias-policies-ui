@@ -1,4 +1,4 @@
-CREATE OR REPLACE
+CREATE
     ALGORITHM = UNDEFINED 
     DEFINER = `root`@`localhost` 
     SQL SECURITY DEFINER
@@ -22,6 +22,7 @@ VIEW `policy_listing_v` AS
         `a`.`premium_amount` AS `premium`,
         `a`.`coverage_amount` AS `coverage`,
         `a`.`deductible_amount` AS `deductible`,
+        `a`.`beneficiaries` AS `beneficiaries`,
         `a`.`cancellation_date` AS `cancellation_date`,
         `a`.`cancellation_reason` AS `cancellation_reason`,
         `a`.`payment_frequency` AS `payment_terms`,

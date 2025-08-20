@@ -1,0 +1,683 @@
+[
+  {
+    "id": "endpoint_1753251172139",
+    "name": "get policy providers",
+    "method": "GET",
+    "url": "/api/get-policy-products-by-type",
+    "requireToken": false,
+    "sqlQuery": "SELECT a.id AS `providerId`, a.partner_name AS `provider`, b.id AS `productId`, b.name AS `productName`\n  FROM partners a\n  JOIN insurance_products b\n    ON a.id = b.partner_id\n WHERE :p_type IS NULL OR :p_type = b.type",
+    "sqlProcedure": "",
+    "pathParams": [],
+    "queryParams": [
+      {
+        "name": "p_type",
+        "type": "string",
+        "required": false,
+        "stringConstraints": {}
+      }
+    ],
+    "payloadParams": [],
+    "status": "active",
+    "lastUsed": "2025-07-23T23:32:01.426Z"
+  },
+  {
+    "id": "endpoint_1754353903850",
+    "name": "Policy Listing",
+    "method": "GET",
+    "url": "/api/policyListing",
+    "requireToken": false,
+    "sqlQuery": "SELECT id, policy_number, type, partner_name AS 'provider', client_name as client, status, CONCAT(effective_date, ' - ', expiration_date) as period, premium, COUNT(1) OVER() AS total_records\nFROM policy_listing_v\nWHERE 1=1 \n  AND (:p_status IS NULL OR STATUS = :p_status) \n  AND (:p_partner_id IS NULL OR PARTNER_ID = :p_partner_id) \n  AND (:p_search IS NULL \n  \t\t\tOR INSTR(LOWER(policy_number), LOWER(:p_search)) > 0 \n\t\t\tOR INSTR(LOWER(client_name), LOWER(:p_search)) > 0\n\t\t\tOR INSTR(LOWER(type), LOWER(:p_search)) > 0\n\t\t\tOR INSTR(LOWER(premium), LOWER(:p_search)) > 0\n  \t\t)\nORDER BY policy_number\nLIMIT :p_rows_per_page OFFSET :p_page_no",
+    "sqlProcedure": "",
+    "pathParams": [],
+    "queryParams": [
+      {
+        "name": "p_rows_per_page",
+        "type": "string",
+        "required": true,
+        "stringConstraints": {}
+      },
+      {
+        "name": "p_search",
+        "type": "string",
+        "required": false,
+        "stringConstraints": {}
+      },
+      {
+        "name": "p_status",
+        "type": "string",
+        "required": false,
+        "stringConstraints": {}
+      },
+      {
+        "name": "p_page_no",
+        "type": "string",
+        "required": true,
+        "stringConstraints": {}
+      },
+      {
+        "name": "p_partner_id",
+        "type": "string",
+        "required": false,
+        "stringConstraints": {}
+      }
+    ],
+    "payloadParams": [],
+    "status": "active",
+    "lastUsed": "2025-08-05T00:31:43.850Z"
+  },
+  {
+    "id": "endpoint_1745569974285",
+    "name": "Policy Status",
+    "method": "GET",
+    "url": "/api/policyStatus",
+    "requireToken": false,
+    "sqlQuery": "WITH RECURSIVE enum_values AS (\n  SELECT \n    SUBSTRING(COLUMN_TYPE, 6, LENGTH(COLUMN_TYPE) - 6) AS enum_list,\n    1 AS pos\n  FROM information_schema.COLUMNS\n  WHERE TABLE_SCHEMA = 'iasdb' \n    AND TABLE_NAME = 'policies'\n    AND COLUMN_NAME = 'status'\n  UNION ALL\n  SELECT \n    enum_list,\n    pos + 1\n  FROM enum_values\n  WHERE pos <= (LENGTH(enum_list) - LENGTH(REPLACE(enum_list, ',', '')))\n)\nSELECT \n  TRIM(BOTH \"'\" FROM \n    SUBSTRING_INDEX(\n      SUBSTRING_INDEX(enum_list, ',', pos),\n      ',',\n      -1\n    )\n  ) AS id,\n  INITCAP(TRIM(BOTH \"'\" FROM \n    SUBSTRING_INDEX(\n      SUBSTRING_INDEX(enum_list, ',', pos),\n      ',',\n      -1\n    )\n  )) AS description\nFROM enum_values\nWHERE pos <= (LENGTH(enum_list) - LENGTH(REPLACE(enum_list, ',', '')) + 1)\n  AND enum_list != '';",
+    "sqlProcedure": "",
+    "pathParams": [],
+    "queryParams": [],
+    "payloadParams": [],
+    "status": "active",
+    "lastUsed": "2025-04-25T08:32:54.285Z"
+  },
+  {
+    "id": "endpoint_1752060041856",
+    "name": "Policy Metrics",
+    "method": "GET",
+    "url": "/api/policy-metrics",
+    "requireToken": false,
+    "sqlQuery": "SELECT *\nFROM policy_dashboard_metrics",
+    "sqlProcedure": "",
+    "pathParams": [],
+    "queryParams": [],
+    "payloadParams": [],
+    "status": "active",
+    "lastUsed": "2025-07-09T11:20:41.856Z"
+  },
+  {
+    "id": "endpoint_1752263189435",
+    "name": "Policy Partners",
+    "method": "GET",
+    "url": "/api/policy-providers",
+    "requireToken": false,
+    "sqlQuery": "Select id as partner_id, partner_name\nfrom partners\nwhere status = 'active'",
+    "sqlProcedure": "",
+    "pathParams": [],
+    "queryParams": [],
+    "payloadParams": [],
+    "status": "active",
+    "lastUsed": "2025-07-11T20:10:57.420Z"
+  },
+  {
+    "id": "endpoint_1753249900510",
+    "name": "policy types",
+    "method": "GET",
+    "url": "/api/policy-types",
+    "requireToken": false,
+    "sqlQuery": "WITH RECURSIVE enum_values AS (\n  SELECT \n    SUBSTRING(COLUMN_TYPE, 6, LENGTH(COLUMN_TYPE) - 6) AS enum_list,\n    1 AS pos\n  FROM information_schema.COLUMNS\n  WHERE TABLE_SCHEMA = 'iasdb' \n    AND TABLE_NAME = 'insurance_products'\n    AND COLUMN_NAME = 'type'\n  UNION ALL\n  SELECT \n    enum_list,\n    pos + 1\n  FROM enum_values\n  WHERE pos <= (LENGTH(enum_list) - LENGTH(REPLACE(enum_list, ',', '')))\n)\nSELECT \n  TRIM(BOTH \"'\" FROM \n    SUBSTRING_INDEX(\n      SUBSTRING_INDEX(enum_list, ',', pos),\n      ',',\n      -1\n    )\n  ) AS type\nFROM enum_values\nWHERE pos <= (LENGTH(enum_list) - LENGTH(REPLACE(enum_list, ',', '')) + 1)\n  AND enum_list != '';",
+    "sqlProcedure": "",
+    "pathParams": [],
+    "queryParams": [],
+    "payloadParams": [],
+    "status": "active",
+    "lastUsed": "2025-08-14T01:33:26.923Z"
+  },
+  {
+    "id": "endpoint_1754011766513",
+    "name": "get all policies",
+    "method": "GET",
+    "url": "/api/get-all-policies",
+    "requireToken": false,
+    "sqlQuery": "SELECT id, policy_number, type, partner_name AS 'provider', client_name as client, status, CONCAT(effective_date, ' - ', expiration_date) as period, premium\n  FROM policy_listing_v\n WHERE (:p_status IS NULL OR STATUS = :p_status) \n  AND (:p_partner_id IS NULL OR PARTNER_ID = :p_partner_id) \n  AND (:p_search IS NULL \n  \t\t\tOR INSTR(LOWER(policy_number), LOWER(:p_search)) > 0 \n\t\t\tOR INSTR(LOWER(client_name), LOWER(:p_search)) > 0\n\t\t\tOR INSTR(LOWER(type), LOWER(:p_search)) > 0\n\t\t\tOR INSTR(LOWER(premium), LOWER(:p_search)) > 0\n  \t\t)\nORDER BY policy_number",
+    "sqlProcedure": "",
+    "pathParams": [],
+    "queryParams": [
+      {
+        "name": "p_status",
+        "type": "string",
+        "required": false,
+        "stringConstraints": {}
+      },
+      {
+        "name": "p_partner_id",
+        "type": "string",
+        "required": false,
+        "stringConstraints": {}
+      },
+      {
+        "name": "p_search",
+        "type": "string",
+        "required": false,
+        "stringConstraints": {}
+      }
+    ],
+    "payloadParams": [],
+    "status": "active",
+    "lastUsed": "2025-08-19T07:22:04.206Z"
+  },
+  {
+    "id": "endpoint_1745574232859",
+    "name": "Policy Details",
+    "method": "GET",
+    "url": "/api/policyDetails",
+    "requireToken": false,
+    "sqlQuery": "SELECT id as policy_id, policy_number, status, \n\t\t type, partner_name, partner_id,\n\t\t client_name, client_type, beneficiaries,\n\t\t DATE_FORMAT(effective_date, '%m/%d/%Y') AS effective_date, DATE_FORMAT(expiration_date, '%m/%d/%Y') AS expiration_date,\n\t\t DATE_FORMAT(effective_date, '%Y-%m-%d') AS start_date, DATE_FORMAT(expiration_date, '%Y-%m-%d') AS end_date,\n\t\t coverage, premium, deductible,\n\t\t payment_terms, notes, preferred_communication,\n\t\t mobile_phone, landline_phone,\n\t\t billing_address, email,\n\t\t DATE_FORMAT(date_created, '%Y-%m-%d') AS date_created, DATE_FORMAT(updated_at, '%Y-%m-%d') AS updated_at\nFROM policy_listing_v a\nWHERE id = :id",
+    "sqlProcedure": "",
+    "pathParams": [],
+    "queryParams": [
+      {
+        "name": "id",
+        "type": "string",
+        "required": true,
+        "stringConstraints": {}
+      }
+    ],
+    "payloadParams": [],
+    "status": "active",
+    "lastUsed": "2025-08-11T01:06:39.541Z"
+  },
+  {
+    "id": "endpoint_1753767620788",
+    "name": "payment based on policy",
+    "method": "GET",
+    "url": "/api/payment-by-policy",
+    "requireToken": false,
+    "sqlQuery": "SELECT policy_id, id as \"payment_id\", policy_number, client_name as 'client', \n\t\tpartner_name AS 'provider', product_name AS type,\n        premium, status, transaction_reference as 'reference_no', DATE_FORMAT(due_date, '%Y-%m-%m') as due_date, DATE_FORMAT(date, '%Y-%m-%m') as date\n  FROM payment_listing_v\n WHERE policy_id = :p_policy_id\n ORDER BY status",
+    "sqlProcedure": "",
+    "pathParams": [],
+    "queryParams": [
+      {
+        "name": "p_policy_id",
+        "type": "number",
+        "required": true,
+        "numberConstraints": {
+          "precision": 0
+        }
+      }
+    ],
+    "payloadParams": [],
+    "status": "active",
+    "lastUsed": "2025-07-29T05:47:50.662Z"
+  },
+  {
+    "id": "endpoint_1753834591483",
+    "name": "Renew Policy",
+    "method": "POST",
+    "url": "/api/renew-policy",
+    "requireToken": false,
+    "sqlQuery": "SELECT @p_message AS message",
+    "sqlProcedure": "CALL renew_policy(:p_policy_id, @p_message)",
+    "pathParams": [],
+    "queryParams": [
+      {
+        "name": "p_policy_id",
+        "type": "string",
+        "required": true,
+        "stringConstraints": {}
+      }
+    ],
+    "payloadParams": [],
+    "status": "active",
+    "lastUsed": "2025-08-04T23:59:04.338Z"
+  },
+  {
+    "id": "endpoint_1752028704982",
+    "name": "save-claim",
+    "method": "POST",
+    "url": "/api/claims",
+    "requireToken": false,
+    "sqlQuery": "",
+    "sqlProcedure": "call create_claim($jsonPayload, @id);",
+    "payload": "{\n    \"policy_id\": 1,\n    \"claim_type\": \"auto\",\n    \"incident_date\": \"2025-05-20\",\n    \"report_date\" : \"2025-05-20\",\n    \"description\" : \"test description\",\n    \"location\" : \"test location\",\n    \"status\" : \"pending_info\",\n    \"total_amount_claimed\" : \"100.00\",\n    \"appoved_amount\" : \"100.00\",\n    \"deductible_applied\" : \"100.00\",\n    \"denial_reason\" : \"test denial reason\"\n}",
+    "pathParams": [],
+    "queryParams": [],
+    "payloadParams": [
+      {
+        "name": "policy_id",
+        "type": "number",
+        "required": true,
+        "numberConstraints": {
+          "precision": 0
+        }
+      },
+      {
+        "name": "incident_date",
+        "type": "date",
+        "required": true,
+        "dateConstraints": {
+          "dateFormat": "YYYY-MM-DD"
+        }
+      },
+      {
+        "name": "report_date",
+        "type": "date",
+        "required": true,
+        "dateConstraints": {
+          "dateFormat": "YYYY-MM-DD"
+        }
+      },
+      {
+        "name": "description",
+        "type": "string",
+        "required": true,
+        "stringConstraints": {}
+      },
+      {
+        "name": "location",
+        "type": "string",
+        "required": false,
+        "stringConstraints": {}
+      },
+      {
+        "name": "status",
+        "type": "string",
+        "required": true,
+        "stringConstraints": {}
+      },
+      {
+        "name": "total_amount_claimed",
+        "type": "string",
+        "required": true,
+        "stringConstraints": {}
+      },
+      {
+        "name": "appoved_amount",
+        "type": "string",
+        "required": false,
+        "stringConstraints": {}
+      },
+      {
+        "name": "deductible_applied",
+        "type": "string",
+        "required": false,
+        "stringConstraints": {}
+      },
+      {
+        "name": "denial_reason",
+        "type": "string",
+        "required": false,
+        "stringConstraints": {}
+      },
+      {
+        "name": "claim_type",
+        "type": "string",
+        "required": true,
+        "stringConstraints": {}
+      }
+    ],
+    "status": "active",
+    "lastUsed": "2025-07-15T01:31:32.604Z",
+    "jsonSchema": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "type": "object",
+      "properties": {
+        "policy_id": {
+          "type": "number",
+          "precision": 0
+        },
+        "incident_date": {
+          "type": "string",
+          "customDateFormat": "YYYY-MM-DD"
+        },
+        "report_date": {
+          "type": "string",
+          "customDateFormat": "YYYY-MM-DD"
+        },
+        "description": {
+          "type": "string"
+        },
+        "location": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "total_amount_claimed": {
+          "type": "string"
+        },
+        "appoved_amount": {
+          "type": "string"
+        },
+        "deductible_applied": {
+          "type": "string"
+        },
+        "denial_reason": {
+          "type": "string"
+        },
+        "claim_type": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "policy_id",
+        "incident_date",
+        "report_date",
+        "description",
+        "status",
+        "total_amount_claimed",
+        "claim_type"
+      ]
+    }
+  },
+  {
+    "id": "endpoint_1754011212902",
+    "name": "Cancel Policy",
+    "method": "POST",
+    "url": "/api/cancel-policy",
+    "requireToken": false,
+    "sqlQuery": "",
+    "sqlProcedure": "UPDATE policies\n   SET status = 'cancelled',\n\t   cancellation_reason = :p_cancellation_reason,\n       cancellation_date = CURRENT_DATE()\n WHERE id = :p_policy_id",
+    "pathParams": [],
+    "queryParams": [
+      {
+        "name": "p_cancellation_reason",
+        "type": "string",
+        "required": true,
+        "stringConstraints": {}
+      },
+      {
+        "name": "p_policy_id",
+        "type": "number",
+        "required": true,
+        "numberConstraints": {
+          "precision": 0
+        }
+      }
+    ],
+    "payloadParams": [],
+    "status": "active",
+    "lastUsed": "2025-08-05T00:06:47.845Z"
+  },
+  {
+    "id": "endpoint_1751870822745",
+    "name": "mark payment",
+    "method": "PATCH",
+    "url": "/api/payment/mark/{id}",
+    "requireToken": false,
+    "sqlQuery": "",
+    "sqlProcedure": "UPDATE payments\n   SET payment_status = :status,\n\t   transaction_reference = IFNULL(:reference_no, transaction_reference)\n WHERE id = {id}",
+    "pathParams": [
+      {
+        "name": "id",
+        "type": "string",
+        "required": true,
+        "stringConstraints": {}
+      }
+    ],
+    "queryParams": [
+      {
+        "name": "status",
+        "type": "string",
+        "required": true,
+        "stringConstraints": {
+          "allowedValues": "remitted,for_remittance,current"
+        }
+      },
+      {
+        "name": "reference_no",
+        "type": "string",
+        "required": false,
+        "stringConstraints": {}
+      }
+    ],
+    "payloadParams": [],
+    "status": "active",
+    "lastUsed": "2025-07-30T01:29:23.137Z"
+  },
+  {
+    "id": "endpoint_1755480072620",
+    "name": "Add Policies (Uploading of Policies)",
+    "method": "POST",
+    "url": "/api/createPolicy",
+    "requireToken": false,
+    "sqlQuery": "SELECT id as policy_id, policy_number, status, \n\t\t type, partner_name, partner_id,\n\t\t client_name, client_type, beneficiaries,\n\t\t DATE_FORMAT(effective_date, '%m/%d/%Y') AS effective_date, DATE_FORMAT(expiration_date, '%m/%d/%Y') AS expiration_date,\n\t\t DATE_FORMAT(effective_date, '%Y-%m-%d') AS start_date, DATE_FORMAT(expiration_date, '%Y-%m-%d') AS end_date,\n\t\t coverage, premium, deductible,\n\t\t payment_terms, notes, preferred_communication,\n\t\t mobile_phone, landline_phone,\n\t\t billing_address, email,\n\t\t DATE_FORMAT(date_created, '%Y-%m-%d') AS date_created, DATE_FORMAT(updated_at, '%Y-%m-%d') AS updated_at\nFROM policy_listing_v a\nWHERE id = @id",
+    "sqlProcedure": "call create_policy($jsonPayload, @id);",
+    "payload": "{\n  \"policy_number\": \"POL100600\",\n  \"client_id\": 767,\n  \"product_id\": 8,\n  \"premium_amount\": 9699.29,\n  \"coverage_amount\": 111814.77,\n  \"deductible_amount\": 814.87,\n  \"status\": \"active\",\n  \"effective_date\": \"2024-03-19\",\n  \"expiration_date\": \"2026-03-19\",\n  \"cancellation_date\": \"\",\n  \"cancellation_reason\": null,\n  \"payment_frequency\": \"one-time\",\n  \"payment_method_id\": 1,\n  \"auto_renewal\": 1,\n  \"underwriting_notes\": \"Itself some possible pay state smile though.\",\n  \"agent_id\": 8,\n  \"commission_rate\": 9.89,\n  \"created_at\": \"2025-04-22T11:31:52.000Z\",\n  \"updated_at\": \"2025-04-22T11:31:52.000Z\"\n}\n",
+    "pathParams": [],
+    "queryParams": [],
+    "payloadParams": [
+      {
+        "name": "policy_number",
+        "type": "string",
+        "required": true,
+        "stringConstraints": {}
+      },
+      {
+        "name": "client_id",
+        "type": "number",
+        "required": true,
+        "numberConstraints": {
+          "precision": 0
+        }
+      },
+      {
+        "name": "product_id",
+        "type": "number",
+        "required": true,
+        "numberConstraints": {
+          "precision": 0
+        }
+      },
+      {
+        "name": "premium_amount",
+        "type": "number",
+        "required": true,
+        "numberConstraints": {
+          "precision": 2
+        }
+      },
+      {
+        "name": "coverage_amount",
+        "type": "number",
+        "required": true,
+        "numberConstraints": {
+          "precision": 2
+        }
+      },
+      {
+        "name": "deductible_amount",
+        "type": "number",
+        "required": true,
+        "numberConstraints": {
+          "precision": 2
+        }
+      },
+      {
+        "name": "status",
+        "type": "string",
+        "required": true,
+        "stringConstraints": {
+          "allowedValues": "active,pending,cancelled,expired,lapsed"
+        }
+      },
+      {
+        "name": "effective_date",
+        "type": "date",
+        "required": true,
+        "dateConstraints": {
+          "dateFormat": "YYYY-MM-DD"
+        }
+      },
+      {
+        "name": "expiration_date",
+        "type": "date",
+        "required": true,
+        "dateConstraints": {
+          "dateFormat": "YYYY-MM-DD"
+        }
+      },
+      {
+        "name": "cancellation_reason",
+        "type": "string",
+        "required": false,
+        "stringConstraints": {}
+      },
+      {
+        "name": "payment_method_id",
+        "type": "number",
+        "required": false,
+        "numberConstraints": {
+          "precision": 0
+        }
+      },
+      {
+        "name": "auto_renewal",
+        "type": "number",
+        "required": true,
+        "numberConstraints": {
+          "precision": 0,
+          "minimum": 0,
+          "maximum": 1
+        }
+      },
+      {
+        "name": "underwriting_notes",
+        "type": "string",
+        "required": false,
+        "stringConstraints": {}
+      },
+      {
+        "name": "agent_id",
+        "type": "number",
+        "required": false,
+        "numberConstraints": {
+          "precision": 0
+        }
+      },
+      {
+        "name": "commission_rate",
+        "type": "number",
+        "required": false,
+        "numberConstraints": {
+          "precision": 2
+        }
+      },
+      {
+        "name": "created_at",
+        "type": "string",
+        "required": true,
+        "stringConstraints": {}
+      },
+      {
+        "name": "updated_at",
+        "type": "string",
+        "required": true,
+        "stringConstraints": {}
+      },
+      {
+        "name": "payment_frequency",
+        "type": "string",
+        "required": true,
+        "stringConstraints": {}
+      },
+      {
+        "name": "cancellation_date",
+        "type": "date",
+        "required": false,
+        "dateConstraints": {
+          "dateFormat": "YYYY-MM-DD"
+        }
+      }
+    ],
+    "status": "active",
+    "lastUsed": "2025-08-18T03:12:40.831Z",
+    "jsonSchema": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "type": "object",
+      "properties": {
+        "policy_number": {
+          "type": "string"
+        },
+        "client_id": {
+          "type": "number",
+          "precision": 0
+        },
+        "product_id": {
+          "type": "number",
+          "precision": 0
+        },
+        "premium_amount": {
+          "type": "number",
+          "precision": 2
+        },
+        "coverage_amount": {
+          "type": "number",
+          "precision": 2
+        },
+        "deductible_amount": {
+          "type": "number",
+          "precision": 2
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "active",
+            "pending",
+            "cancelled",
+            "expired",
+            "lapsed"
+          ]
+        },
+        "effective_date": {
+          "type": "string",
+          "customDateFormat": "YYYY-MM-DD"
+        },
+        "expiration_date": {
+          "type": "string",
+          "customDateFormat": "YYYY-MM-DD"
+        },
+        "cancellation_reason": {
+          "type": "string"
+        },
+        "payment_method_id": {
+          "type": "number",
+          "precision": 0
+        },
+        "auto_renewal": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "precision": 0
+        },
+        "underwriting_notes": {
+          "type": "string"
+        },
+        "agent_id": {
+          "type": "number",
+          "precision": 0
+        },
+        "commission_rate": {
+          "type": "number",
+          "precision": 2
+        },
+        "created_at": {
+          "type": "string"
+        },
+        "updated_at": {
+          "type": "string"
+        },
+        "payment_frequency": {
+          "type": "string"
+        },
+        "cancellation_date": {
+          "type": "string",
+          "customDateFormat": "YYYY-MM-DD"
+        }
+      },
+      "required": [
+        "policy_number",
+        "client_id",
+        "product_id",
+        "premium_amount",
+        "coverage_amount",
+        "deductible_amount",
+        "status",
+        "effective_date",
+        "expiration_date",
+        "auto_renewal",
+        "created_at",
+        "updated_at",
+        "payment_frequency"
+      ]
+    }
+  }
+]

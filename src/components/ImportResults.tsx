@@ -240,8 +240,10 @@ export const ImportResults: React.FC<ImportResultsProps> = ({
                 };
                 downloadErrorReport(errorReportData);
                 toast({
-                  title: "Error Report Downloaded",
-                  description: `Error report for ${fileName} has been downloaded successfully.`,
+                  title: t("uploading:error_report_downloaded"),
+                  description: t("uploading:error_report_downloaded_msg", {
+                    fileName: fileName,
+                  }),
                 });
               }}
             >

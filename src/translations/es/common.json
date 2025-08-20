@@ -314,6 +314,21 @@
     "import_completed_at_date": "Importación completada en {{date}}",
     "previous_step": "Paso Anterior",
     "next_step": "Siguiente Paso",
-    "next": "Siguiente"
+    "next": "Siguiente",
+    "import_completed_w_errors_msg": "{{successfulRows}} filas importadas, {{failedRows}} fallaron.",
+    "view_imported_data_toast_msg": "Redirigiendo para ver los datos importados de {{displayName}}...",
+    "invalid_file_type": "Tipo de archivo inválido",
+    "invalid_file_type_description": "Por favor suba un archivo Excel (.xlsx) o CSV (.csv).",
+    "file_uploaded_successfully": "Archivo subido exitosamente",
+    "file_uploaded_successfully_description": "Se cargaron {{rows}} filas con {{columns}} columnas",
+    "file_parse_error": "Error al parsear el archivo",
+    "file_parse_error_msg": "No se pudo parsear el archivo.",
+    "import_successful": "Importación exitosa",
+    "import_successful_description": "Se importaron exitosamente {{rows}} filas. (Servidor API no disponible - modo de respaldo)",
+    "import_successful_msg": "{{rows}} filas importadas exitosamente.",
+    "import_failed": "Importación fallida",
+    "import_failed_msg": "Ocurrió un error durante la importación. Por favor inténtelo nuevamente.",
+    "error_report_downloaded": "Reporte de errores descargado",
+    "error_report_downloaded_msg": "El reporte de errores para {{fileName}} se ha descargado exitosamente."
   }
 }

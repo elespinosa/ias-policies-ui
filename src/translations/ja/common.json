@@ -314,6 +314,21 @@
     "import_completed_at_date": "{{date}}にインポート完了",
     "previous_step": "前のステップ",
     "next_step": "次のステップ",
-    "next": "次へ"
+    "next": "次へ",
+    "import_completed_w_errors_msg": "{{successfulRows}} 行をインポート、{{failedRows}} 行が失敗しました。",
+    "view_imported_data_toast_msg": "{{displayName}} のインポート済みデータ表示にリダイレクトしています...",
+    "invalid_file_type": "無効なファイルタイプ",
+    "invalid_file_type_description": "Excel（.xlsx）またはCSV（.csv）ファイルをアップロードしてください。",
+    "file_uploaded_successfully": "ファイルが正常にアップロードされました",
+    "file_uploaded_successfully_description": "{{rows}} 行、{{columns}} 列を読み込みました",
+    "file_parse_error": "ファイル解析エラー",
+    "file_parse_error_msg": "ファイルの解析に失敗しました。",
+    "import_successful": "インポート成功",
+    "import_successful_description": "{{rows}} 行を正常にインポートしました。（APIサーバー利用不可 - フォールバックモード）",
+    "import_successful_msg": "{{rows}} 行を正常にインポートしました。",
+    "import_failed": "インポート失敗",
+    "import_failed_msg": "インポート中にエラーが発生しました。もう一度お試しください。",
+    "error_report_downloaded": "エラーレポートをダウンロードしました",
+    "error_report_downloaded_msg": "{{fileName}} のエラーレポートを正常にダウンロードしました。"
   }
 }

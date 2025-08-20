@@ -314,6 +314,21 @@
     "import_completed_at_date": "Import abgeschlossen um {{date}}",
     "previous_step": "Vorheriger Schritt",
     "next_step": "Nächster Schritt",
-    "next": "Weiter"
+    "next": "Weiter",
+    "import_completed_w_errors_msg": "{{successfulRows}} Zeilen importiert, {{failedRows}} fehlgeschlagen.",
+    "view_imported_data_toast_msg": "Weiterleitung zur Ansicht der importierten Daten für {{displayName}}...",
+    "invalid_file_type": "Ungültiger Dateityp",
+    "invalid_file_type_description": "Bitte laden Sie eine Excel- (.xlsx) oder CSV- (.csv) Datei hoch.",
+    "file_uploaded_successfully": "Datei erfolgreich hochgeladen",
+    "file_uploaded_successfully_description": "{{rows}} Zeilen mit {{columns}} Spalten geladen",
+    "file_parse_error": "Datei-Parse-Fehler",
+    "file_parse_error_msg": "Datei konnte nicht geparst werden.",
+    "import_successful": "Import erfolgreich",
+    "import_successful_description": "{{rows}} Zeilen erfolgreich importiert. (API-Server nicht verfügbar – Fallback-Modus)",
+    "import_successful_msg": "{{rows}} Zeilen erfolgreich importiert.",
+    "import_failed": "Import fehlgeschlagen",
+    "import_failed_msg": "Beim Import ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.",
+    "error_report_downloaded": "Fehlerbericht heruntergeladen",
+    "error_report_downloaded_msg": "Fehlerbericht für {{fileName}} wurde erfolgreich heruntergeladen."
   }
 }

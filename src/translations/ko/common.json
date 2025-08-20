@@ -314,6 +314,21 @@
     "import_completed_at_date": "{{date}}에 가져오기 완료",
     "previous_step": "이전 단계",
     "next_step": "다음 단계",
-    "next": "다음"
+    "next": "다음",
+    "import_completed_w_errors_msg": "{{successfulRows}}행이 가져와졌고, {{failedRows}}행이 실패했습니다.",
+    "view_imported_data_toast_msg": "{{displayName}}의 가져온 데이터 보기로 이동합니다...",
+    "invalid_file_type": "잘못된 파일 유형",
+    "invalid_file_type_description": "Excel (.xlsx) 또는 CSV (.csv) 파일을 업로드하세요.",
+    "file_uploaded_successfully": "파일이 성공적으로 업로드되었습니다",
+    "file_uploaded_successfully_description": "{{rows}}행, {{columns}}열을 로드했습니다",
+    "file_parse_error": "파일 파싱 오류",
+    "file_parse_error_msg": "파일 파싱에 실패했습니다.",
+    "import_successful": "가져오기 성공",
+    "import_successful_description": "{{rows}}행을 성공적으로 가져왔습니다. (API 서버를 사용할 수 없음 - 대체 모드)",
+    "import_successful_msg": "{{rows}}행을 성공적으로 가져왔습니다.",
+    "import_failed": "가져오기 실패",
+    "import_failed_msg": "가져오는 동안 오류가 발생했습니다. 다시 시도하세요.",
+    "error_report_downloaded": "오류 보고서가 다운로드되었습니다",
+    "error_report_downloaded_msg": "{{fileName}}의 오류 보고서가 성공적으로 다운로드되었습니다."
   }
 }

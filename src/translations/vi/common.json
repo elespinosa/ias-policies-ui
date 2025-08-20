@@ -314,6 +314,21 @@
     "import_completed_at_date": "Nhập hoàn thành lúc {{date}}",
     "previous_step": "Bước Trước",
     "next_step": "Bước Tiếp theo",
-    "next": "Tiếp theo"
+    "next": "Tiếp theo",
+    "import_completed_w_errors_msg": "Đã nhập {{successfulRows}} hàng, {{failedRows}} hàng thất bại.",
+    "view_imported_data_toast_msg": "Đang chuyển hướng để xem dữ liệu đã nhập cho {{displayName}}...",
+    "invalid_file_type": "Loại tệp không hợp lệ",
+    "invalid_file_type_description": "Vui lòng tải lên tệp Excel (.xlsx) hoặc CSV (.csv).",
+    "file_uploaded_successfully": "Tải tệp lên thành công",
+    "file_uploaded_successfully_description": "Đã tải {{rows}} hàng với {{columns}} cột",
+    "file_parse_error": "Lỗi phân tích tệp",
+    "file_parse_error_msg": "Không thể phân tích tệp.",
+    "import_successful": "Nhập thành công",
+    "import_successful_description": "Đã nhập thành công {{rows}} hàng. (Máy chủ API không khả dụng - sử dụng chế độ dự phòng)",
+    "import_successful_msg": "Đã nhập thành công {{rows}} hàng.",
+    "import_failed": "Nhập thất bại",
+    "import_failed_msg": "Đã xảy ra lỗi trong quá trình nhập. Vui lòng thử lại.",
+    "error_report_downloaded": "Đã tải xuống Báo cáo Lỗi",
+    "error_report_downloaded_msg": "Báo cáo lỗi cho {{fileName}} đã được tải xuống thành công."
   }
 }

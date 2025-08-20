@@ -10,7 +10,6 @@ import {
   DatabaseTable,
   FileData,
   ImportResult,
-  ImportStep,
 } from "@/types/import";
 import { autoMapColumns } from "@/utils/columnMatcher";
 import type { MappingTemplate } from "@/utils/localStorage";
@@ -19,54 +18,11 @@ import { Database, Upload } from "lucide-react";
 import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
-const initialSteps: ImportStep[] = [
-  {
-    id: 1,
-    title: "Upload",
-    description: "Upload your data file",
-    completed: false,
-    current: true,
-  },
-  {
-    id: 2,
-    title: "Select Table",
-    description: "Choose target table",
-    completed: false,
-    current: false,
-  },
-  {
-    id: 3,
-    title: "Map Columns",
-    description: "Map file columns to database",
-    completed: false,
-    current: false,
-  },
-  {
-    id: 4,
-    title: "Preview",
-    description: "Preview and validate data",
-    completed: false,
-    current: false,
-  },
-  {
-    id: 5,
-    title: "Import",
-    description: "Import data to database",
-    completed: false,
-    current: false,
-  },
-];
-
 export const DataImport: React.FC = () => {
   const { toast } = useToast();
   const { t } = useTranslation();
 
-  // const navigate = useNavigate();
-  // const [searchParams] = useSearchParams();
-  // const templateId = searchParams.get("template");
-
   const [currentStep, setCurrentStep] = React.useState(1);
-  const [steps, setSteps] = React.useState<ImportStep[]>(initialSteps);
   const [fileData, setFileData] = React.useState<FileData | null>(null);
   const [selectedTable, setSelectedTable] =
     React.useState<DatabaseTable | null>(null);
@@ -75,90 +31,24 @@ export const DataImport: React.FC = () => {
     null
   );
   const [isImporting, setIsImporting] = React.useState(false);
-  const [importStartTime, setImportStartTime] = React.useState<number>(0);
   const [selectedTemplate, setSelectedTemplate] =
     React.useState<MappingTemplate | null>(null);
-  // const [returnedFromTableSelection, setReturnedFromTableSelection] =
-  //   React.useState(false);
 
-  // Load template if specified in URL
-  // React.useEffect(() => {
-  //   if (templateId) {
-  //     const getTemplates = async () => {
-  //       try {
-  //         const templates = await apiService.getTemplates();
-  //         const template = templates.find((t) => t.id === templateId);
-  //         if (template) {
-  //           setSelectedTemplate(template);
-  //           // Auto-select the table
-  //           const table = mockDatabaseTables.find(
-  //             (t) => t.name === template.tableName
-  //           );
-  //           if (table) {
-  //             setSelectedTable(table);
-  //             setMappings(template.mappings);
-  //           }
-  //         }
-  //       } catch (error) {
-  //         console.error("Error fetching templates:", error);
-  //         toast({
-  //           title: "Error loading template",
-  //           description:
-  //             "Failed to load template from storage. Please try again.",
-  //           variant: "destructive",
-  //         });
-  //       }
-  //     };
-  //     getTemplates();
-  //   }
-  // }, [templateId, toast]);
   useEffect(() => {
     setSelectedTable(mockDatabaseTables.find((e) => e.name === "policies"));
   }, []);
 
-  const updateSteps = (stepNumber: number, completed: boolean = false) => {
-    setSteps((prevSteps) =>
-      prevSteps.map((step) => ({
-        ...step,
-        completed:
-          step.id < stepNumber || (step.id === stepNumber && completed),
-        current: step.id === stepNumber && !completed,
-      }))
-    );
-  };
-
   const handleFileLoaded = (data: FileData) => {
-    console.log("1 running");
-    console.log({ page: "DataImport", data });
     setFileData(data);
-    console.log({ s: 2, fileData });
-    // setReturnedFromTableSelection(false);
 
     // Initialize mappings with automatic mapping
     if (data) {
       const autoMappings = autoMapColumns(data.headers, selectedTable.columns);
-      console.log({ autoMappings });
       setMappings(autoMappings);
     }
 
-    updateSteps(2);
     setCurrentStep(2);
   };
-
-  // const handleTableSelect = (table: DatabaseTable) => {
-  //   setSelectedTable(table);
-  //   console.log("running", fileData);
-
-  //   // Initialize mappings with automatic mapping
-  //   if (fileData) {
-  //     const autoMappings = autoMapColumns(fileData.headers, table.columns);
-  //     console.log({ autoMappings });
-  //     setMappings(autoMappings);
-  //   }
-
-  //   updateSteps(2);
-  //   setCurrentStep(2);
-  // };
 
   const handleMappingsChange = (newMappings: ColumnMappingType[]) => {
     setMappings(newMappings);
@@ -170,38 +60,16 @@ export const DataImport: React.FC = () => {
     const mappedRequiredColumns = requiredColumns.filter((col) =>
       newMappings.some((m) => !m.skip && m.tableColumn === col.name)
     );
-
-    if (
-      hasValidMappings &&
-      mappedRequiredColumns.length === requiredColumns.length
-    ) {
-      updateSteps(4);
-    }
-  };
-
-  const handleTemplateSaved = (template: MappingTemplate) => {
-    toast({
-      title: "Template saved",
-      description: `Template "${template.name}" has been saved for future use.`,
-    });
   };
 
   const handleStartImport = async (preparedData: any[]) => {
     if (!fileData || !selectedTable || !mappings) return;
 
     setCurrentStep(4);
-    updateSteps(4);
     setIsImporting(true);
     const startTime = Date.now();
-    setImportStartTime(startTime);
 
     try {
-      console.log("Starting import with prepared data:", {
-        tableName: selectedTable.name,
-        data: preparedData,
-        totalRows: preparedData.length,
-      });
-
       // Try to call the local API endpoint to create client
       let apiResult = null;
       let useFallback = false;
@@ -215,17 +83,9 @@ export const DataImport: React.FC = () => {
 
         for (let i = 0; i < preparedData.length; i++) {
           const rowData = preparedData[i];
-          console.log(`Sending row ${i + 1} to API:`, rowData);
-          console.log(
-            `Request body JSON for row ${i + 1}:`,
-            JSON.stringify(rowData, null, 2)
-          );
 
           // Get the URL endpoint from the selected table configuration
           if (!selectedTable.urlEndpoint) {
-            console.warn(
-              `No URL endpoint configured for table: ${selectedTable.name}`
-            );
             apiErrors.push({
               row: i + 1,
               error: {
@@ -234,10 +94,6 @@ export const DataImport: React.FC = () => {
             });
             continue;
           }
-
-          console.log(
-            `Using endpoint for ${selectedTable.name}: ${selectedTable.urlEndpoint}`
-          );
 
           const apiResponse = await fetch(selectedTable.urlEndpoint, {
             method: "POST",
@@ -250,15 +106,9 @@ export const DataImport: React.FC = () => {
           if (apiResponse.ok) {
             const result = await apiResponse.json();
             results.push(result);
-            console.log(`Row ${i + 1} API response:`, result);
           } else {
             const errorText = await apiResponse.text();
-            console.warn(
-              `Row ${i + 1} API call failed with status: ${
-                apiResponse.status
-              }. Response:`,
-              errorText
-            );
+
             try {
               const errorJson = JSON.parse(errorText);
               apiErrors.push({ row: i + 1, error: errorJson });
@@ -275,7 +125,6 @@ export const DataImport: React.FC = () => {
         const allErrors = apiErrors.flatMap((error) => {
           const errorMessage =
             error.error.error || error.error.message || "Unknown error";
-          console.log(`Processing error for row ${error.row}:`, errorMessage);
 
           // Try to extract column information from the error message
           let column = "System";
@@ -313,7 +162,6 @@ export const DataImport: React.FC = () => {
             value: null,
           };
 
-          console.log(`Parsed error for row ${error.row}:`, parsedError);
           return [parsedError];
         });
 
@@ -325,10 +173,6 @@ export const DataImport: React.FC = () => {
           errors: allErrors,
         };
       } catch (fetchError) {
-        console.warn(
-          "API server not available. Using fallback mode:",
-          fetchError
-        );
         // Create fallback result
         importResult = {
           success: true,
@@ -354,11 +198,12 @@ export const DataImport: React.FC = () => {
         });
 
         setImportResult(importResult);
-        updateSteps(4, true);
 
         toast({
-          title: "Import Successful",
-          description: `Successfully imported ${importResult.successfulRows} rows. (API server not available - using fallback mode)`,
+          title: t("uploading:import_successful"),
+          description: t("uploading:import_successful_description", {
+            rows: importResult.successfulRows,
+          }),
         });
         return; // Exit early to avoid the code below
       }
@@ -380,22 +225,25 @@ export const DataImport: React.FC = () => {
       });
 
       setImportResult(importResult);
-      updateSteps(5, true);
 
       if (importResult.success) {
         toast({
-          title: "Import Successful",
-          description: `Successfully imported ${importResult.successfulRows} rows.`,
+          title: t("uploading:import_successful"),
+          description: t("uploading:import_successful_msg", {
+            rows: importResult.successfulRows,
+          }),
         });
       } else {
         toast({
-          title: "Import Completed with Errors",
-          description: `${importResult.successfulRows} rows imported, ${importResult.failedRows} failed.`,
+          title: t("uploading:import_completed_w_errors"),
+          description: t("uploading:import_completed_w_errors_msg", {
+            successfulRows: importResult.successfulRows,
+            failedRows: importResult.failedRows,
+          }),
           variant: "destructive",
         });
       }
     } catch (error) {
-      console.error("Import error:", error);
       const endTime = Date.now();
       const duration = endTime - startTime;
 
@@ -420,11 +268,11 @@ export const DataImport: React.FC = () => {
       });
 
       toast({
-        title: "Import Failed",
+        title: t("uploading:import_failed"),
         description:
           error instanceof Error
             ? error.message
-            : "An error occurred during import. Please try again.",
+            : t("uploading:import_failed_msg"),
         variant: "destructive",
       });
     } finally {
@@ -434,7 +282,6 @@ export const DataImport: React.FC = () => {
 
   const handleStartOver = () => {
     setCurrentStep(1);
-    setSteps(initialSteps);
     setFileData(null);
     setSelectedTable(null);
     setMappings([]);
@@ -454,12 +301,6 @@ export const DataImport: React.FC = () => {
     if (currentStep > 1) {
       const newStep = currentStep - 1;
       setCurrentStep(newStep);
-      updateSteps(newStep);
-
-      // Track if we're returning to upload from table selection
-      // if (currentStep === 2 && newStep === 1) {
-      //   setReturnedFromTableSelection(true);
-      // }
     }
   };
 
@@ -467,8 +308,6 @@ export const DataImport: React.FC = () => {
     if (currentStep < 4) {
       const newStep = currentStep + 1;
       setCurrentStep(newStep);
-      updateSteps(newStep);
-      // setReturnedFromTableSelection(false);
     }
   };
 
@@ -493,7 +332,6 @@ export const DataImport: React.FC = () => {
         return false;
     }
   };
-  console.log({ currentStep, fileData, selectedTemplate });
 
   return (
     /* removed min-h-screen classname */
@@ -519,9 +357,6 @@ export const DataImport: React.FC = () => {
             {t("uploading:data_import_wizard_description")}
           </p>
         </div>
-
-        {/* Stepper */}
-        {/* <ImportStepper steps={steps} /> */}
 
         {/* Main Content */}
         <div className="space-y-6 overflow-x-hidden">
@@ -550,15 +385,11 @@ export const DataImport: React.FC = () => {
               onStartOver={handleStartOver}
               onViewImportedData={() => {
                 toast({
-                  title: "View Imported Data",
-                  description: `Redirecting to view imported data for ${selectedTable?.displayName}...`,
+                  title: t("uploading:view_imported_data"),
+                  description: t("uploading:view_imported_data_toast_msg", {
+                    displayName: selectedTable?.displayName,
+                  }),
                 });
-                // TODO: Implement navigation to data view page
-                // For now, just show a toast message
-                console.log(
-                  "View imported data for table:",
-                  selectedTable?.name
-                );
               }}
               fileName={fileData?.fileName}
               tableName={selectedTable?.displayName}

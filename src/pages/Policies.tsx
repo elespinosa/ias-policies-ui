@@ -339,12 +339,6 @@ const Policies: React.FC = () => {
       setSelectedPolicy(policy);
       setIsCancelPolicyOpen(true);
     }
-    // await cancelPolicy(policyId);
-    // showToast(
-    //   t("renewals:status_updated_description", {
-    //     status: t("renewals:for_renewal"),
-    //   })
-    // );
   };
 
   const handleSearch = useCallback(
@@ -436,7 +430,13 @@ const Policies: React.FC = () => {
         })
       );
 
-      const blob = await generateCSVExcel(type, "get-all-policies");
+      const endpoint = `get-all-policies?p_search=${encodeURIComponent(
+        searchValue || ""
+      )}&p_status=${encodeURIComponent(
+        status || ""
+      )}&p_partner_id=${encodeURIComponent(filterProvider || "")}`;
+
+      const blob = await generateCSVExcel(type, endpoint);
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
@@ -482,14 +482,6 @@ const Policies: React.FC = () => {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-
-          {/* <Button
-            className="sm:w-auto"
-            onClick={() => setIsEditModalOpen(true)}
-          >
-            <Plus className="mr-2 h-4 w-4" />
-            New Policy
-          </Button> */}
         </div>
       </div>
 
@@ -510,7 +502,7 @@ const Policies: React.FC = () => {
       )}
 
       {/* <div className="flex flex-col items-start gap-4 md:flex-row md:items-end"> */}
-      <div className="flex flex-col gap-4 md:flex-row md:items-end">
+      <div className="flex flex-col gap-4 md:flex-row md:items-start">
         <div className="flex-1 space-y-2">
           <label className="text-sm font-medium">{t("common:search")}</label>
           <div className="flex flex-col sm:flex-row gap-4">

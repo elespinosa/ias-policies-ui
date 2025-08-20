@@ -314,6 +314,21 @@
     "import_completed_at_date": "Importation terminée le {{date}}",
     "previous_step": "Étape précédente",
     "next_step": "Étape suivante",
-    "next": "Suivant"
+    "next": "Suivant",
+    "import_completed_w_errors_msg": "{{successfulRows}} lignes importées, {{failedRows}} ont échoué.",
+    "view_imported_data_toast_msg": "Redirection pour voir les données importées pour {{displayName}}...",
+    "invalid_file_type": "Type de fichier invalide",
+    "invalid_file_type_description": "Veuillez téléverser un fichier Excel (.xlsx) ou CSV (.csv).",
+    "file_uploaded_successfully": "Fichier téléversé avec succès",
+    "file_uploaded_successfully_description": "{{rows}} lignes chargées avec {{columns}} colonnes",
+    "file_parse_error": "Erreur d'analyse du fichier",
+    "file_parse_error_msg": "Échec de l'analyse du fichier.",
+    "import_successful": "Importation réussie",
+    "import_successful_description": "{{rows}} lignes importées avec succès. (Serveur API indisponible - mode de secours)",
+    "import_successful_msg": "{{rows}} lignes importées avec succès.",
+    "import_failed": "Échec de l'importation",
+    "import_failed_msg": "Une erreur s'est produite lors de l'importation. Veuillez réessayer.",
+    "error_report_downloaded": "Rapport d'erreurs téléchargé",
+    "error_report_downloaded_msg": "Le rapport d'erreurs pour {{fileName}} a été téléchargé avec succès."
   }
 }

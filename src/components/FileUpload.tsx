@@ -23,7 +23,6 @@ export const FileUpload: React.FC<FileUploadProps> = ({
   onFileLoaded,
   fileData,
 }) => {
-  console.log({ onFileLoaded, fileData });
   const { t } = useTranslation();
   const { toast } = useToast();
   const [isDragOver, setIsDragOver] = React.useState(false);
@@ -38,8 +37,8 @@ export const FileUpload: React.FC<FileUploadProps> = ({
 
       if (!["xlsx", "xls", "csv"].includes(fileExtension || "")) {
         toast({
-          title: "Invalid File Type",
-          description: "Please upload an Excel (.xlsx) or CSV (.csv) file.",
+          title: t("uploading:invalid_file_type"),
+          description: t("uploading:invalid_file_type_description"),
           variant: "destructive",
         });
         return;
@@ -48,19 +47,21 @@ export const FileUpload: React.FC<FileUploadProps> = ({
       setIsLoading(true);
       try {
         const parsedData = await parseFile(file);
-        console.log({ parsedData, file });
         onFileLoaded(parsedData);
         toast({
-          title: "File Uploaded Successfully",
-          description: `Loaded ${parsedData.rows.length} rows with ${parsedData.headers.length} columns.`,
+          title: t("uploading:file_uploaded_successfully"),
+          description: t("uploading:file_uploaded_successfully_description", {
+            rows: parsedData.rows.length,
+            columns: parsedData.headers.length,
+          }),
         });
       } catch (error) {
         toast({
-          title: "File Parse Error",
+          title: t("uploading:file_parse_error"),
           description:
             error instanceof Error
               ? error.message
-              : "Failed to parse the file.",
+              : t("uploading:file_parse_error_msg"),
           variant: "destructive",
         });
       } finally {

@@ -314,6 +314,21 @@
     "import_completed_at_date": "اكتمل الاستيراد في {{date}}",
     "previous_step": "الخطوة السابقة",
     "next_step": "الخطوة التالية",
-    "next": "التالي"
+    "next": "التالي",
+    "import_completed_w_errors_msg": "تم استيراد {{successfulRows}} صف، فشل {{failedRows}}.",
+    "view_imported_data_toast_msg": "جارٍ التحويل لعرض البيانات المستوردة لـ {{displayName}}...",
+    "invalid_file_type": "نوع ملف غير صالح",
+    "invalid_file_type_description": "يرجى رفع ملف Excel (.xlsx) أو CSV (.csv).",
+    "file_uploaded_successfully": "تم رفع الملف بنجاح",
+    "file_uploaded_successfully_description": "تم تحميل {{rows}} صفًا مع {{columns}} عمودًا",
+    "file_parse_error": "خطأ في تحليل الملف",
+    "file_parse_error_msg": "فشل تحليل الملف.",
+    "import_successful": "تم الاستيراد بنجاح",
+    "import_successful_description": "تم استيراد {{rows}} صفًا بنجاح. (الخادم غير متاح - وضع بديل)",
+    "import_successful_msg": "تم استيراد {{rows}} صفًا بنجاح.",
+    "import_failed": "فشل الاستيراد",
+    "import_failed_msg": "حدث خطأ أثناء الاستيراد. يرجى المحاولة مرة أخرى.",
+    "error_report_downloaded": "تم تنزيل تقرير الأخطاء",
+    "error_report_downloaded_msg": "تم تنزيل تقرير الأخطاء للملف {{fileName}} بنجاح."
   }
 }
