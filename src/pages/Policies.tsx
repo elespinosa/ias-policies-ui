@@ -64,15 +64,17 @@ import {
   Filter,
   Loader2,
   MoreHorizontal,
+  Plus,
   Upload,
 } from "lucide-react";
 import React, { Fragment, useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-interface EditPaymentDetails {
+export interface EditPaymentDetails {
   payment_id?: number;
   policy_id: number;
   policy_no: string;
+  amount?: string;
   reference_no?: string;
   date: string;
   documents?: Array<Document>;
@@ -92,7 +94,7 @@ const Policies: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [filterProvider, setFilterProvider] = useState("");
   const [openPolicyDetail, setOpenPolicyDetail] = useState(false);
-  const [policyId, setPolicyId] = useState<number | null>(null);
+  const [selectedPolicyId, setSelectedPolicyId] = useState<number | null>(null);
   const [policyListing, setPolicyListing] = useState<PolicyListing[]>([]);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [searchValue, setSearchValue] = useState("");
@@ -100,6 +102,7 @@ const Policies: React.FC = () => {
   const [totalRows, setTotalRows] = useState<number | undefined>(undefined);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isEditPaymentOpen, setIsEditPaymentOpen] = useState(false);
   const [editPaymentTab, setEditPaymentTab] = useState("payment_details");
   const [paymentDetails, setPaymentDetails] =
@@ -113,6 +116,9 @@ const Policies: React.FC = () => {
   const [isAddClaimOpen, setIsAddClaimOpen] = useState(false);
   const [selectedClaim, setSelectedClaim] = useState(null);
   const [selectedPolicy, setSelectedPolicy] = useState<PolicyListing | null>(
+    null
+  );
+  const [pendingEditPolicyId, setPendingEditPolicyId] = useState<number | null>(
     null
   );
 
@@ -147,7 +153,7 @@ const Policies: React.FC = () => {
     isError: isPolicyProvidersError,
   } = usePolicyProvidersQuery();
 
-  const { data: policyDetail } = usePolicyDetailQuery(policyId);
+  const { data: policyDetail } = usePolicyDetailQuery(selectedPolicyId);
   const { data: policyTypes } = usePolicyTypesQuery();
 
   const updateHeaders = useCallback(
@@ -183,15 +189,23 @@ const Policies: React.FC = () => {
     [policyStatusMap, t]
   );
 
-  const prepareTableDataForList = (dataList: any[]) => {
+  const prepareTableDataForList = (dataList: PolicyListing[]) => {
     const moneyColumns = ["premium"];
+    const excludedColumns = ["currency_code"];
     const data = dataList?.map((el) => {
       const clonedData = { ...el };
       for (const column of moneyColumns) {
         const value = clonedData[column];
         if (value) {
-          clonedData[column] = formatCurrency(value);
+          clonedData[column] = formatCurrency(value, {
+            withSymbol: true,
+            currencyCode: clonedData.currency_code,
+          });
         }
+      }
+
+      for (const column of excludedColumns) {
+        delete clonedData[column];
       }
 
       return clonedData;
@@ -205,10 +219,10 @@ const Policies: React.FC = () => {
     let isMounted = true;
     if (isPolicyListFetched && policyList && isMounted) {
       const dataToDisplay = prepareTableDataForList(policyList);
-      const tempHeaders = getHeaders(policyList, t);
+      const tempHeaders = getHeaders(dataToDisplay, t);
       const tempActions = getTableOptions(t);
       setHeaders(updateHeaders(tempHeaders));
-      setTotalRows(getTotalPolicies(policyList));
+      setTotalRows(getTotalPolicies(dataToDisplay));
       setPolicyListing(dataToDisplay);
       setAction(tempActions.actions);
     }
@@ -218,21 +232,49 @@ const Policies: React.FC = () => {
     };
   }, [isPolicyListFetched, policyList, updateHeaders]);
 
+  // Handle automatic opening of edit modal when policy detail data becomes available
+  useEffect(() => {
+    if (pendingEditPolicyId && policyDetail && policyDetail.length > 0) {
+      // setSelectedPolicy(policyDetail[0]);
+      setIsEditModalOpen(true);
+      setPendingEditPolicyId(null);
+    }
+  }, [pendingEditPolicyId, policyDetail]);
+
+  // Fallback: if policy detail query takes too long, use policyList data
+  useEffect(() => {
+    if (pendingEditPolicyId && policyList) {
+      const timeoutId = setTimeout(() => {
+        if (pendingEditPolicyId) {
+          const policy = policyList.find((p) => p.id === pendingEditPolicyId);
+          if (policy) {
+            setSelectedPolicy(policy);
+            setIsEditModalOpen(true);
+            setPendingEditPolicyId(null);
+          }
+        }
+      }, 2000); // Wait 2 seconds for the query to complete
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [pendingEditPolicyId, policyList]);
+
   const handleClosePolicyDetail = () => {
     setOpenPolicyDetail(false);
-    setPolicyId(null);
+    setSelectedPolicyId(null);
+    setPendingEditPolicyId(null);
+    setSelectedPolicy(null);
   };
 
   const handleRowAction = (action: string, rowId: string | number) => {
     let policyId = typeof rowId === "string" ? Number.parseInt(rowId) : rowId;
-
+    setSelectedPolicyId(policyId);
     // Handle different actions based on the action type
     switch (action) {
       case "#edit":
         handleEdit(policyId);
         break;
       case "#view":
-        setPolicyId(policyId);
         setOpenPolicyDetail(true);
         break;
       case "#renew":
@@ -253,12 +295,8 @@ const Policies: React.FC = () => {
   };
 
   const handleEdit = (policyId: number) => {
-    setPolicyId(policyId);
-    const policy = policyList.find((p) => p.id === policyId);
-    if (policy) {
-      setSelectedPolicy(policy);
-      setIsEditModalOpen(true);
-    }
+    // Set the pending edit policy ID to trigger the useEffect when data becomes available
+    setPendingEditPolicyId(policyId);
   };
 
   const handleRenew = async (policyId: number) => {
@@ -482,6 +520,13 @@ const Policies: React.FC = () => {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+          <Button
+            className="sm:w-auto"
+            onClick={() => setIsCreateModalOpen(true)}
+          >
+            <Plus className="mr-2 h-4 w-4" />
+            {t("policies:new_policy")}
+          </Button>
         </div>
       </div>
 
@@ -639,7 +684,7 @@ const Policies: React.FC = () => {
         policy={policyDetail}
         isOpen={openPolicyDetail}
         action={handleRowAction}
-        policyId={policyId}
+        policyId={selectedPolicyId}
         onClose={handleClosePolicyDetail}
       />
 
@@ -650,10 +695,15 @@ const Policies: React.FC = () => {
 
       <EditPolicyModal
         policyArr={policyDetail}
-        isOpen={isEditModalOpen}
+        isOpen={isEditModalOpen || isCreateModalOpen}
+        type={isEditModalOpen ? "edit" : isCreateModalOpen ? "create" : ""}
         policyTypes={policyTypes || []}
         onClose={(fn: () => void) => {
           setIsEditModalOpen(false);
+          setIsCreateModalOpen(false);
+          setPendingEditPolicyId(null);
+          setSelectedPolicyId(null);
+          setSelectedPolicy(null);
           fn();
         }}
       />
@@ -686,6 +736,25 @@ const Policies: React.FC = () => {
             <div className="grid space-y-4 mt-4">
               {editPaymentTab === "payment_details" ? (
                 <Fragment>
+                  <div className="space-y-2">
+                    <Label htmlFor="edit-amount" className="text-left">
+                      {t("payments:amount")}
+                    </Label>
+                    <div className="items-center gap-4">
+                      <Input
+                        id="edit-amount"
+                        placeholder={t("payments:amount_placeholder")}
+                        value={paymentDetails?.amount || ""}
+                        onChange={(e) =>
+                          setPaymentDetails({
+                            ...paymentDetails,
+                            amount: e.target.value,
+                          })
+                        }
+                        className="w-full"
+                      />
+                    </div>
+                  </div>
                   <div className="space-y-2">
                     <Label htmlFor="edit-reference-no" className="text-left">
                       {t("payments:reference_number")}

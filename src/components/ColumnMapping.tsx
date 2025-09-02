@@ -241,7 +241,7 @@ export const ColumnMapping: React.FC<ColumnMappingProps> = ({
                             {availableColumns.map((column) => (
                               <SelectItem key={column.name} value={column.name}>
                                 <div className="flex items-center gap-1">
-                                  {column.displayName}
+                                  {t(column.displayName)}
                                   {column.required && (
                                     <span className="text-red-500">*</span>
                                   )}
@@ -306,7 +306,7 @@ export const ColumnMapping: React.FC<ColumnMappingProps> = ({
                     >
                       <div>
                         <p className="font-medium text-sm">
-                          {column.displayName}
+                          {t(column.displayName)}
                         </p>
                         <p className="text-xs text-muted-foreground">
                           {column.description}

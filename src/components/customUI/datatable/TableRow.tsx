@@ -178,7 +178,7 @@ const TableRow: React.FC<TableRowProps> = ({
           >
             <div
               className={cn(
-                "whitespace-pre-wrap break-words hyphens-auto overflow-hidden text-ellipsis min-w-[100px] max-w-[300px]",
+                "whitespace-pre-wrap break-words hyphens-auto overflow-hidden text-ellipsis  max-w-[300px]", // min-w-[1000px]
                 header.id.toLowerCase() === "status"
                   ? "w-fit whitespace-nowrap"
                   : "",

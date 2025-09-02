@@ -26,7 +26,7 @@ interface ImportResultsProps {
   result: ImportResult | null;
   isImporting: boolean;
   onStartOver: () => void;
-  onViewImportedData?: () => void;
+  onViewImportedData?: (type: "success" | "failed") => void;
   fileName?: string;
   tableName?: string;
 }
@@ -252,14 +252,25 @@ export const ImportResults: React.FC<ImportResultsProps> = ({
             </Button>
           )}
 
-          {result.success && (
+          {result.successfulRows > 0 && (
             <Button
               variant="default"
               className="gap-2"
-              onClick={onViewImportedData}
+              onClick={() => onViewImportedData?.("success")}
             >
               <CheckCircle className="h-4 w-4" />
               {t("uploading:view_imported_data")}
+            </Button>
+          )}
+
+          {result.failedRows > 0 && (
+            <Button
+              variant="destructive"
+              className="gap-2"
+              onClick={() => onViewImportedData?.("failed")}
+            >
+              <XCircle className="h-4 w-4" />
+              {t("uploading:view_unimported_data")}
             </Button>
           )}
         </div>

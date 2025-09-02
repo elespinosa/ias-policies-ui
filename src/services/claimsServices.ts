@@ -71,3 +71,8 @@ export const deleteClaim = async (claimId: string) => {
     );
   }
 };
+
+export const getTotalRows = (dataList: any[]) => {
+  const totalRecords = dataList[0]?.total_records;
+  return totalRecords ? totalRecords : dataList.length;
+};

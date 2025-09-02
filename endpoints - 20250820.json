@@ -160,7 +160,7 @@
     "method": "GET",
     "url": "/api/policyDetails",
     "requireToken": false,
-    "sqlQuery": "SELECT id as policy_id, policy_number, status, \n\t\t type, partner_name, partner_id,\n\t\t client_name, client_type, beneficiaries,\n\t\t DATE_FORMAT(effective_date, '%m/%d/%Y') AS effective_date, DATE_FORMAT(expiration_date, '%m/%d/%Y') AS expiration_date,\n\t\t DATE_FORMAT(effective_date, '%Y-%m-%d') AS start_date, DATE_FORMAT(expiration_date, '%Y-%m-%d') AS end_date,\n\t\t coverage, premium, deductible,\n\t\t payment_terms, notes, preferred_communication,\n\t\t mobile_phone, landline_phone,\n\t\t billing_address, email,\n\t\t DATE_FORMAT(date_created, '%Y-%m-%d') AS date_created, DATE_FORMAT(updated_at, '%Y-%m-%d') AS updated_at\nFROM policy_listing_v a\nWHERE id = :id",
+    "sqlQuery": "SELECT id as policy_id, policy_number, status, \n\t\t type, partner_name, partner_id,\n\t\t client_name, client_type, insured_properties,\n\t\t DATE_FORMAT(effective_date, '%m/%d/%Y') AS effective_date, DATE_FORMAT(expiration_date, '%m/%d/%Y') AS expiration_date,\n\t\t DATE_FORMAT(effective_date, '%Y-%m-%d') AS start_date, DATE_FORMAT(expiration_date, '%Y-%m-%d') AS end_date,\n\t\t coverage, premium, deductible,\n\t\t payment_terms, notes, preferred_communication,\n\t\t mobile_phone, landline_phone,\n\t\t billing_address, email,\n\t\t DATE_FORMAT(date_created, '%Y-%m-%d') AS date_created, DATE_FORMAT(updated_at, '%Y-%m-%d') AS updated_at\nFROM policy_listing_v a\nWHERE id = :id",
     "sqlProcedure": "",
     "pathParams": [],
     "queryParams": [
@@ -425,11 +425,11 @@
   },
   {
     "id": "endpoint_1755480072620",
-    "name": "Add Policies (Uploading of Policies)",
+    "name": "Add/Update/Upload Policy",
     "method": "POST",
     "url": "/api/createPolicy",
     "requireToken": false,
-    "sqlQuery": "SELECT id as policy_id, policy_number, status, \n\t\t type, partner_name, partner_id,\n\t\t client_name, client_type, beneficiaries,\n\t\t DATE_FORMAT(effective_date, '%m/%d/%Y') AS effective_date, DATE_FORMAT(expiration_date, '%m/%d/%Y') AS expiration_date,\n\t\t DATE_FORMAT(effective_date, '%Y-%m-%d') AS start_date, DATE_FORMAT(expiration_date, '%Y-%m-%d') AS end_date,\n\t\t coverage, premium, deductible,\n\t\t payment_terms, notes, preferred_communication,\n\t\t mobile_phone, landline_phone,\n\t\t billing_address, email,\n\t\t DATE_FORMAT(date_created, '%Y-%m-%d') AS date_created, DATE_FORMAT(updated_at, '%Y-%m-%d') AS updated_at\nFROM policy_listing_v a\nWHERE id = @id",
+    "sqlQuery": "SELECT id as policy_id, policy_number, status, \n\t\t type, partner_name, partner_id,\n\t\t client_name, client_type, insured_properties,\n\t\t DATE_FORMAT(effective_date, '%m/%d/%Y') AS effective_date, DATE_FORMAT(expiration_date, '%m/%d/%Y') AS expiration_date,\n\t\t DATE_FORMAT(effective_date, '%Y-%m-%d') AS start_date, DATE_FORMAT(expiration_date, '%Y-%m-%d') AS end_date,\n\t\t coverage, premium, deductible,\n\t\t payment_terms, notes, preferred_communication,\n\t\t mobile_phone, landline_phone,\n\t\t billing_address, email,\n\t\t DATE_FORMAT(date_created, '%Y-%m-%d') AS date_created, DATE_FORMAT(updated_at, '%Y-%m-%d') AS updated_at\nFROM policy_listing_v a\nWHERE id = @id",
     "sqlProcedure": "call create_policy($jsonPayload, @id);",
     "payload": "{\n  \"policy_number\": \"POL100600\",\n  \"client_id\": 767,\n  \"product_id\": 8,\n  \"premium_amount\": 9699.29,\n  \"coverage_amount\": 111814.77,\n  \"deductible_amount\": 814.87,\n  \"status\": \"active\",\n  \"effective_date\": \"2024-03-19\",\n  \"expiration_date\": \"2026-03-19\",\n  \"cancellation_date\": \"\",\n  \"cancellation_reason\": null,\n  \"payment_frequency\": \"one-time\",\n  \"payment_method_id\": 1,\n  \"auto_renewal\": 1,\n  \"underwriting_notes\": \"Itself some possible pay state smile though.\",\n  \"agent_id\": 8,\n  \"commission_rate\": 9.89,\n  \"created_at\": \"2025-04-22T11:31:52.000Z\",\n  \"updated_at\": \"2025-04-22T11:31:52.000Z\"\n}\n",
     "pathParams": [],
@@ -609,13 +609,7 @@
         },
         "status": {
           "type": "string",
-          "enum": [
-            "active",
-            "pending",
-            "cancelled",
-            "expired",
-            "lapsed"
-          ]
+          "enum": ["active", "pending", "cancelled", "expired", "lapsed"]
         },
         "effective_date": {
           "type": "string",

@@ -1,4 +1,4 @@
-import { PolicyListing } from "@/lib/types";
+import { InsertUpdatePolicyI, PolicyListing } from "@/lib/types";
 import { api } from "./api";
 
 export const getTableOptions = (t: (key: string) => string) => {
@@ -67,14 +67,53 @@ export const getTableOptions = (t: (key: string) => string) => {
   return options;
 };
 
+export interface PolicyDetailI {
+  policy_id: number;
+  policy_number: string;
+  ref_policy_number?: string;
+  type: string;
+  partner_id: number;
+  partner_name: string;
+  product_id: number;
+  product_name: string;
+  client_id: number;
+  client_name: string;
+  status: string;
+  start_date: string;
+  end_date: string;
+  currency_code: string;
+  currency_rate: number;
+  premium: string | number;
+  payment_frequency: string;
+  coverage: string | number;
+  deductible: string | number;
+  payment_method_id: number;
+  auto_renewal: number;
+  agent_id: number;
+  commission_rate: number;
+  insured_properties: string;
+  underwriting_notes: string;
+
+  client_type: string;
+  preferred_communication: string;
+  mobile_phone: string;
+  landline_phone: string;
+  billing_address: string;
+  email: string;
+  effective_date: string;
+  expiration_date: string;
+  date_created: string;
+  updated_at: string;
+}
+
 export const fetchPolicy = async (policyId: string | number) => {
   try {
-    const response = await api.get<PolicyListing[]>("/api/policyDetails", {
+    console.log("policyId", policyId);
+    const response = await api.get("/api/policyDetails", {
       params: { id: policyId },
     });
 
-    //@ts-ignore
-    return response.data.data;
+    return response.data.data as PolicyDetailI[];
   } catch (error: any) {
     throw new Error(
       "Failed to fetch policy: " + (error.message || "Unknown error")
@@ -177,15 +216,13 @@ export interface IPolicyProviderPerType {
   provider: string;
   productId: number;
   productName: string;
+  productType: string;
+  isActive: number | string;
 }
 
-export const fetchPolicyProductsByType = async (type?: string) => {
+export const fetchPolicyProductsByType = async () => {
   try {
-    const response = await api.get("/api/get-policy-products-by-type", {
-      params: {
-        p_type: type,
-      },
-    });
+    const response = await api.get("/api/get-policy-products-by-type");
     return response.data.data as IPolicyProviderPerType[];
   } catch (error: any) {
     throw new Error(
@@ -266,22 +303,125 @@ export interface updatePolicyDetailsI {
   premium: number;
   coverage: number;
   deductible: number;
-  beneficiaries?: string;
+  insuredProperties?: string;
   notes?: string;
 }
 
-export const updatePolicy = async (
-  policyId: number,
-  policyDetails: updatePolicyDetailsI
+export const insertUpdatePolicy = async (
+  policyDetails: InsertUpdatePolicyI
 ) => {
   try {
-    await api.post("/api/update-policy", {
-      ...policyDetails,
-      policyId: policyId,
-    });
+    await api.post("/api/createPolicy", policyDetails);
   } catch (error: any) {
     throw new Error(
       "Failed to update policy: " + (error.message || "Unknown error")
+    );
+  }
+};
+
+export interface IClientLov {
+  id: number;
+  client_type: string;
+  name: string;
+  email: string;
+  customer_type: string;
+  total_records: number;
+}
+
+export const fetchClientsLov = async (
+  searchValue: string,
+  rowFrom?: any,
+  rowTo?: any
+) => {
+  try {
+    const offset = (rowFrom - 1) * rowTo;
+    const response = await api.get("/api/clients-lov", {
+      params: {
+        p_search: searchValue ? searchValue : null,
+        p_page_no: offset,
+        p_rows_per_page: rowTo,
+      },
+    });
+    return response.data.data as IClientLov[];
+  } catch (error: any) {
+    throw new Error(
+      "Failed to fetch claim policies: " + (error.message || "Unknown error")
+    );
+  }
+};
+
+export interface ICurrencyLov {
+  currency_code: string;
+  symbol: string;
+  currency_name: string;
+  currency_rate: number;
+}
+
+export const fetchCurrencyLov = async () => {
+  try {
+    const response = await api.get("/api/currency-lov", {});
+    return response.data.data as ICurrencyLov[];
+  } catch (error: any) {
+    throw new Error(
+      "Failed to fetch claim policies: " + (error.message || "Unknown error")
+    );
+  }
+};
+
+export interface IPaymentFrequencyLov {
+  payment_frequency: string;
+}
+
+export const fetchPaymentFrequencyLov = async () => {
+  try {
+    const response = await api.get("/api/payment-frequency-lov", {});
+    return response.data.data as IPaymentFrequencyLov[];
+  } catch (error: any) {
+    throw new Error(
+      "Failed to fetch claim policies: " + (error.message || "Unknown error")
+    );
+  }
+};
+
+export interface IQuoteLov {
+  id: number;
+  quote_number: string;
+  type: string;
+  policy_type: string;
+  client_id: number;
+  client_name: string;
+  partner_id: number;
+  partner_name: string;
+  product_id: number;
+  product_name: string;
+  start_date: string;
+  end_date: string;
+  quoted_premium: number | string;
+  coverage_amount: number | string;
+  deductible_amount: number | string;
+  quote_data: string;
+  status: string;
+  total_records: number;
+}
+
+export const fetchQuotesLov = async (
+  searchValue: string,
+  rowFrom?: any,
+  rowTo?: any
+) => {
+  try {
+    const offset = (rowFrom - 1) * rowTo;
+    const response = await api.get("/api/policy/quotes-lov", {
+      params: {
+        p_search: searchValue ? searchValue : null,
+        p_page_no: offset,
+        p_rows_per_page: rowTo,
+      },
+    });
+    return response.data.data as IQuoteLov[];
+  } catch (error: any) {
+    throw new Error(
+      "Failed to fetch claim policies: " + (error.message || "Unknown error")
     );
   }
 };

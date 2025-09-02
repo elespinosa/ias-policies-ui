@@ -1,3 +1,5 @@
+import { Currency } from "@/lib/types";
+
 export const policyStatusMap = (t: (key: string) => string) => {
   return {
     active: {
@@ -23,10 +25,38 @@ export const policyStatusMap = (t: (key: string) => string) => {
   };
 };
 
-export const defaultCurrency = (t: (key: string) => string) => {
+export const quoteStatusMap = (t: (key: string) => string) => {
+  return {
+    approved: {
+      label: t("quoteStatus:approved"),
+      class: "bg-green-200 text-green-800 hover:bg-green-400",
+    },
+    draft: {
+      label: t("quoteStatus:draft"),
+      class: "bg-gray-200 text-gray-800 hover:bg-gray-400",
+    },
+    pending: {
+      label: t("quoteStatus:pending"),
+      class: "bg-orange-200 text-orange-800 hover:bg-orange-400",
+    },
+    rejected: {
+      label: t("quoteStatus:rejected"),
+      class: "bg-red-200 text-red-800 hover:bg-red-400",
+    },
+    converted: {
+      label: t("quoteStatus:converted"),
+      class: "bg-green-200 text-green-800 hover:bg-green-400",
+    },
+  };
+};
+
+export const defaultCurrency = (
+  t: (key: string) => string
+): Record<string, Currency> => {
   return {
     peso: {
       id: "peso",
+      code: "PHP",
       label: t("currency:peso"),
       accessor: "peso",
       icon: "peso",
@@ -34,6 +64,7 @@ export const defaultCurrency = (t: (key: string) => string) => {
     },
     dollar: {
       id: "dollar",
+      code: "USD",
       label: t("currency:dollar"),
       accessor: "dollar",
       icon: "dollar",
@@ -41,6 +72,7 @@ export const defaultCurrency = (t: (key: string) => string) => {
     },
     euro: {
       id: "euro",
+      code: "EUR",
       label: t("currency:euro"),
       accessor: "euro",
       icon: "euro",
@@ -48,6 +80,7 @@ export const defaultCurrency = (t: (key: string) => string) => {
     },
     pound: {
       id: "pound",
+      code: "GBP",
       label: t("currency:pound"),
       accessor: "pound",
       icon: "pound",
@@ -55,6 +88,7 @@ export const defaultCurrency = (t: (key: string) => string) => {
     },
     yen: {
       id: "yen",
+      code: "JPY",
       label: t("currency:yen"),
       accessor: "yen",
       icon: "yen",
@@ -62,6 +96,7 @@ export const defaultCurrency = (t: (key: string) => string) => {
     },
     rupee: {
       id: "rupee",
+      code: "INR",
       label: t("currency:rupee"),
       accessor: "rupee",
       icon: "rupee",
@@ -69,6 +104,7 @@ export const defaultCurrency = (t: (key: string) => string) => {
     },
     dirham: {
       id: "dirham",
+      code: "AED",
       label: t("currency:dirham"),
       accessor: "dirham",
       icon: "dirham",
@@ -129,6 +165,54 @@ export const getHeaderLists = (t: (key: string) => string) => {
       id: "actions",
       label: t("headers:actions"),
       accessor: "actions",
+      align: "",
+    },
+    client_type: {
+      id: "client_type",
+      label: "",
+      accessor: "client_type",
+      align: "",
+    },
+    name: {
+      id: "name",
+      label: t("headers:name"),
+      accessor: "name",
+      align: "",
+    },
+    email: {
+      id: "email",
+      label: t("headers:email"),
+      accessor: "email",
+      align: "",
+    },
+    customer_type: {
+      id: "customer_type",
+      label: t("headers:customer_type"),
+      accessor: "customer_type",
+      align: "",
+    },
+    amount: {
+      id: "amount",
+      label: t("headers:amount"),
+      accessor: "amount",
+      align: "right",
+    },
+    quote_number: {
+      id: "quote_number",
+      label: t("headers:quote_#"),
+      accessor: "quote_number",
+      align: "",
+    },
+    client_name: {
+      id: "client_name",
+      label: t("headers:client"),
+      accessor: "client_name",
+      align: "",
+    },
+    policy_type: {
+      id: "policy_type",
+      label: t("headers:type"),
+      accessor: "policy_type",
       align: "",
     },
   };

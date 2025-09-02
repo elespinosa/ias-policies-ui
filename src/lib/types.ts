@@ -100,6 +100,7 @@ export type PolicyListing = {
   id: number;
   period: string;
   policy_number: string;
+  currency_code: string;
   premium: number;
   provider: string;
   status: string;
@@ -117,6 +118,40 @@ export type Activity = {
   timestamp: Date;
   tenantId: string;
 };
+
+export interface Currency {
+  id: string;
+  code: string;
+  label: string;
+  accessor: string;
+  icon: string;
+  symbol: string;
+}
+
+export interface InsertUpdatePolicyI {
+  quote_id?: number;
+  policy_id?: number;
+  policy_number?: string;
+  ref_policy_number?: string;
+  client_id: number;
+  partner_id: number;
+  product_id: number;
+  currency_code: string;
+  currency_rate: number;
+  premium_amount: number;
+  coverage_amount: number;
+  deductible_amount: number;
+  insured_properties?: string;
+  status: string;
+  effective_date: string;
+  expiration_date: string;
+  payment_frequency: string;
+  payment_method_id?: number;
+  auto_renewal: 1 | 0;
+  underwriting_notes?: string;
+  agent_id?: number;
+  commission_rate?: number;
+}
 
 export enum EntityType {
   CUSTOMER = "customer",

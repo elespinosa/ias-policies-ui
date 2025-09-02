@@ -3,8 +3,10 @@ import { DataPreview } from "@/components/DataPreview";
 import { FileUpload } from "@/components/FileUpload";
 import { ImportResults } from "@/components/ImportResults";
 import { Button } from "@/components/ui/button";
-import { mockDatabaseTables } from "@/data/mockDatabase";
+import { ViewImportData } from "@/components/ViewImportData";
+import { policyUploadingTemplate } from "@/data/mockDatabase";
 import { useToast } from "@/hooks/use-toast";
+import { api } from "@/services/api";
 import {
   ColumnMapping as ColumnMappingType,
   DatabaseTable,
@@ -33,9 +35,14 @@ export const DataImport: React.FC = () => {
   const [isImporting, setIsImporting] = React.useState(false);
   const [selectedTemplate, setSelectedTemplate] =
     React.useState<MappingTemplate | null>(null);
+  const [isViewImportedDataOpen, setIsViewImportedDataOpen] =
+    React.useState(false);
+  const [viewImportedData, setViewImportedData] = React.useState<
+    "success" | "failed" | null
+  >(null);
 
   useEffect(() => {
-    setSelectedTable(mockDatabaseTables.find((e) => e.name === "policies"));
+    setSelectedTable(policyUploadingTemplate);
   }, []);
 
   const handleFileLoaded = (data: FileData) => {
@@ -70,16 +77,14 @@ export const DataImport: React.FC = () => {
     const startTime = Date.now();
 
     try {
-      // Try to call the local API endpoint to create client
-      let apiResult = null;
-      let useFallback = false;
-
       let importResult: ImportResult;
 
       try {
         // Send each row individually to the API
         const results = [];
         const apiErrors = [];
+        const importedRows = [];
+        const failedRowsData = [];
 
         for (let i = 0; i < preparedData.length; i++) {
           const rowData = preparedData[i];
@@ -95,26 +100,18 @@ export const DataImport: React.FC = () => {
             continue;
           }
 
-          const apiResponse = await fetch(selectedTable.urlEndpoint, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(rowData),
-          });
-
-          if (apiResponse.ok) {
-            const result = await apiResponse.json();
-            results.push(result);
-          } else {
-            const errorText = await apiResponse.text();
-
-            try {
-              const errorJson = JSON.parse(errorText);
-              apiErrors.push({ row: i + 1, error: errorJson });
-            } catch (e) {
-              apiErrors.push({ row: i + 1, error: { message: errorText } });
-            }
+          try {
+            const response = await api.post(selectedTable.urlEndpoint, rowData);
+            results.push(response.data);
+            importedRows.push({ id: i + 1, row_number: i + 1, ...rowData });
+          } catch (error: any) {
+            const errorMessage =
+              error.response?.data?.error || error.message || "Unknown error";
+            apiErrors.push({
+              row: i + 1,
+              error: { message: errorMessage },
+            });
+            failedRowsData.push({ id: i + 1, row_number: i + 1, ...rowData });
           }
         }
 
@@ -171,6 +168,8 @@ export const DataImport: React.FC = () => {
           successfulRows,
           failedRows,
           errors: allErrors,
+          importedRows,
+          failedRowsData,
         };
       } catch (fetchError) {
         // Create fallback result
@@ -180,6 +179,8 @@ export const DataImport: React.FC = () => {
           successfulRows: preparedData.length,
           failedRows: 0,
           errors: [],
+          importedRows: [],
+          failedRowsData: [],
         };
 
         const endTime = Date.now();
@@ -381,16 +382,35 @@ export const DataImport: React.FC = () => {
               result={importResult}
               isImporting={isImporting}
               onStartOver={handleStartOver}
-              onViewImportedData={() => {
+              onViewImportedData={(type) => {
+                setIsViewImportedDataOpen(true);
+                setViewImportedData(type);
                 toast({
-                  title: t("uploading:view_imported_data"),
-                  description: t("uploading:view_imported_data_toast_msg", {
-                    displayName: selectedTable?.displayName,
-                  }),
+                  title:
+                    type === "success"
+                      ? t("uploading:view_imported_data")
+                      : t("uploading:view_unimported_data"),
+                  description:
+                    type === "success"
+                      ? t("uploading:view_imported_data_toast_msg", {
+                          displayName: selectedTable?.displayName,
+                        })
+                      : t("uploading:view_unimported_data_toast_msg", {
+                          displayName: selectedTable?.displayName,
+                        }),
                 });
               }}
               fileName={fileData?.fileName}
               tableName={selectedTable?.displayName}
+            />
+          )}
+
+          {importResult && (
+            <ViewImportData
+              isOpen={isViewImportedDataOpen}
+              onClose={() => setIsViewImportedDataOpen(false)}
+              importResult={importResult}
+              dataType={viewImportedData}
             />
           )}
 

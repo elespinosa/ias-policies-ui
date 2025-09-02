@@ -171,30 +171,28 @@ export const DataPreview: React.FC<DataPreviewProps> = ({
       });
 
       // Then, add all required columns that are not mapped (with default values)
-      selectedTable.columns.forEach((column) => {
+      selectedTable.additionalColumns?.forEach((column) => {
         if (column.required && !rowData.hasOwnProperty(column.name)) {
-          // Use default value for unmapped required fields
-          let defaultValue = column.defaultValue;
+          let defaultValue: any = column.defaultValue;
 
-          // Handle special default values
-          if (column.name === "status" && !defaultValue) {
-            defaultValue = "active";
-          } else if (column.name === "created_at" && !defaultValue) {
-            defaultValue = new Date().toISOString();
-          } else if (column.name === "updated_at" && !defaultValue) {
-            defaultValue = new Date().toISOString();
-          } else if (column.name === "email" && !defaultValue) {
-            // Generate a placeholder email based on first_name and last_name if available
-            const firstName = rowData.first_name || "user";
-            const lastName = rowData.last_name || "unknown";
-            defaultValue = `${firstName.toLowerCase()}.${lastName.toLowerCase()}@example.com`;
-          } else if (column.name === "mobile_phone" && !defaultValue) {
-            defaultValue = "+1234567890";
-          } else if (column.name === "risk_profile" && !defaultValue) {
-            defaultValue = "low";
+          if (column.dataType === "INT") {
+            defaultValue = parseInt(defaultValue);
+          } else if (column.dataType === "DECIMAL") {
+            defaultValue = parseFloat(defaultValue);
+          } else if (column.dataType === "BOOLEAN") {
+            defaultValue = Boolean(defaultValue);
+          } else if (column.dataType === "DATE") {
+            defaultValue = new Date(defaultValue).toISOString().split("T")[0];
+          } else if (
+            column.dataType === "DATETIME" ||
+            column.dataType === "TIMESTAMP"
+          ) {
+            defaultValue = new Date(defaultValue).toISOString();
           }
 
-          rowData[column.name] = defaultValue || null;
+          if (defaultValue !== null || defaultValue !== undefined) {
+            rowData[column.name] = defaultValue;
+          }
         }
       });
 
@@ -310,7 +308,7 @@ export const DataPreview: React.FC<DataPreviewProps> = ({
                           <div className="space-y-1">
                             <div className="flex items-center gap-2">
                               <span className="font-medium">
-                                {column?.displayName}
+                                {t(column?.displayName)}
                               </span>
                               <Badge variant="outline" className="text-xs">
                                 {column?.dataType}
@@ -438,7 +436,7 @@ export const DataPreview: React.FC<DataPreviewProps> = ({
               {canImport
                 ? t("uploading:n_rows_will_be_imported", {
                     rows: previewData.length,
-                    tableName: selectedTable.displayName,
+                    tableName: t(selectedTable.displayName),
                   })
                 : t("uploading:fix_validation_error_to_proceed")}
             </p>

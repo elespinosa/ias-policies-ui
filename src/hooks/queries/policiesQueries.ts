@@ -1,5 +1,8 @@
 import { PolicyListing } from "@/lib/types";
 import {
+  fetchClientsLov,
+  fetchCurrencyLov,
+  fetchPaymentFrequencyLov,
   fetchPolicies,
   fetchPolicy,
   fetchPolicyMetrics,
@@ -7,6 +10,7 @@ import {
   fetchPolicyProviders,
   fetchPolicyStatus,
   fetchPolicyTypes,
+  fetchQuotesLov,
   preparePolicyData,
 } from "@/services/policyServices";
 import { useQuery } from "@tanstack/react-query";
@@ -123,14 +127,11 @@ export const usePolicyTypesQuery = (config?: PolicyQueryConfig) => {
 };
 
 // Policy provider per type
-export const usePolicyProductsByTypeQuery = (
-  type?: string,
-  config?: PolicyQueryConfig
-) => {
+export const usePolicyProductsByTypeQuery = (config?: PolicyQueryConfig) => {
   return useQuery({
-    queryKey: ["fetchPolicyProductsByType", type],
+    queryKey: ["fetchPolicyProductsByType"],
     queryFn: async () => {
-      const response = await fetchPolicyProductsByType(type);
+      const response = await fetchPolicyProductsByType();
       return response;
     },
     enabled: true,
@@ -142,3 +143,67 @@ export const usePolicyProductsByTypeQuery = (
 // export const getPolicyTableOptions = (provider: string) => {
 //   return getTableOptions(provider);
 // };
+
+// Common types
+
+export const useClientsLovQuery = (
+  searchValue: string | null,
+  page: number,
+  rowsPerPage: number,
+  config?: PolicyQueryConfig
+) => {
+  return useQuery({
+    queryKey: ["clients-policy", searchValue, page, rowsPerPage],
+    queryFn: async () => {
+      const response = await fetchClientsLov(searchValue, page, rowsPerPage);
+      return response;
+    },
+    enabled: true,
+    ...defaultConfig,
+    ...config,
+  });
+};
+
+export const useCurrencyLovQuery = (config?: PolicyQueryConfig) => {
+  return useQuery({
+    queryKey: ["currency-lov"],
+    queryFn: async () => {
+      const response = await fetchCurrencyLov();
+      return response;
+    },
+    enabled: true,
+    ...defaultConfig,
+    ...config,
+  });
+};
+
+export const usePaymentFrequencyLovQuery = (config?: PolicyQueryConfig) => {
+  return useQuery({
+    queryKey: ["payment-frequency-lov"],
+    queryFn: async () => {
+      const response = await fetchPaymentFrequencyLov();
+      return response;
+    },
+    enabled: true,
+    ...defaultConfig,
+    ...config,
+  });
+};
+
+export const useQuotesLovQuery = (
+  searchValue: string | null,
+  page: number,
+  rowsPerPage: number,
+  config?: PolicyQueryConfig
+) => {
+  return useQuery({
+    queryKey: ["quotes-lov", searchValue, page, rowsPerPage],
+    queryFn: async () => {
+      const response = await fetchQuotesLov(searchValue, page, rowsPerPage);
+      return response;
+    },
+    enabled: true,
+    ...defaultConfig,
+    ...config,
+  });
+};

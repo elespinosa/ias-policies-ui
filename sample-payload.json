@@ -1,0 +1,23 @@
+{
+  "policy_id": null,
+  "policy_number": "",
+  "ref_policy_number": "",
+  "client_id": 1,
+  "partner_id": 1,
+  "product_id": 1,
+  "currency_code": "PHP",
+  "currency_rate": 1,
+  "premium_amount": 10000,
+  "coverage_amount": 10000,
+  "deductible_amount": 10000,
+  "insured_properties": "",
+  "status": "active",
+  "effective_date": "2025-08-28",
+  "expiration_date": "2026-08-28",
+  "payment_frequency": "one-time",
+  "payment_method_id": null,
+  "auto_renewal": 1,
+  "underwriting_notes": "",
+  "agent_id": 1,
+  "commission_rate": 1
+}

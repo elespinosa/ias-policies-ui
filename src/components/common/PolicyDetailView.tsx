@@ -1,9 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { defaultCurrency, policyStatusMap } from "@/functions/commonLists";
+import { policyStatusMap } from "@/functions/commonLists";
 import { cn, formatCurrency } from "@/lib/utils";
+import { PolicyDetailI } from "@/services/policyServices";
 import {
+  Banknote,
+  Currency,
   LucideBuilding,
   LucideCalendar,
   LucideClipboardList,
@@ -17,10 +20,6 @@ import DocumentCard from "../customUI/DocumentCard";
 import { Icons } from "../customUI/Icons";
 import Modal from "../customUI/Modal";
 
-interface PolicyDetailData {
-  [key: string]: any | null;
-}
-
 const PolicyDetailView = ({
   policy,
   isOpen,
@@ -28,7 +27,7 @@ const PolicyDetailView = ({
   policyId,
   onClose,
 }: {
-  policy: PolicyDetailData[] | null;
+  policy: PolicyDetailI[] | null;
   isOpen: boolean;
   action: (action: string, rowId: number) => void;
   policyId: number;
@@ -40,8 +39,6 @@ const PolicyDetailView = ({
   if (!policy || !policy[0]) return null;
 
   const policyDetail = policy[0];
-  const currency = defaultCurrency(t)["peso"]; // TODO: make this dynamic
-
   const handlePrint = () => {
     window.print();
   };
@@ -61,7 +58,22 @@ const PolicyDetailView = ({
 
         <TabsContent value="details">
           <div className="mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 space-y-4">
+            <div className="space-y-1.5">
+              <h4 className="text-sm font-medium flex items-center">
+                <LucideUser className="mr-1.5 h-3.5 text-muted-foreground" />
+                {t("common:client")}
+              </h4>
+              <p className="text-lg font-bold">{policyDetail.client_name}</p>
+            </div>
+            <Separator />
             <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-1.5">
+                <h4 className="text-sm font-medium flex items-center">
+                  <LucideBuilding className="mr-1.5 h-3.5 w-3.5 text-muted-foreground" />
+                  {t("policies:ref_policy_number")}
+                </h4>
+                <p>{policyDetail.ref_policy_number ?? ""}</p>
+              </div>
               <div className="space-y-1.5">
                 <h4 className="text-sm font-medium flex items-center">
                   <LucideTag className="mr-1.5 h-3.5 w-3.5 text-muted-foreground" />
@@ -69,6 +81,9 @@ const PolicyDetailView = ({
                 </h4>
                 <p>{t(`insuranceTypes:${policyDetail.type}_insurance`)}</p>
               </div>
+            </div>
+            <Separator />
+            <div className="grid grid-cols-2 gap-4">
               <div className="space-y-1.5">
                 <h4 className="text-sm font-medium flex items-center">
                   <LucideBuilding className="mr-1.5 h-3.5 w-3.5 text-muted-foreground" />
@@ -76,14 +91,13 @@ const PolicyDetailView = ({
                 </h4>
                 <p>{policyDetail.partner_name}</p>
               </div>
-            </div>
-            <Separator />
-            <div className="space-y-1.5">
-              <h4 className="text-sm font-medium flex items-center">
-                <LucideUser className="mr-1.5 h-3.5 text-muted-foreground" />
-                {t("common:client")}
-              </h4>
-              <p>{policyDetail.client_name}</p>
+              <div className="space-y-1.5">
+                <h4 className="text-sm font-medium flex items-center">
+                  <LucideUser className="mr-1.5 h-3.5 text-muted-foreground" />
+                  {t("common:product_name")}
+                </h4>
+                <p>{policyDetail.product_name}</p>
+              </div>
             </div>
             <Separator />
             <div className="grid grid-cols-2 gap-4">
@@ -103,15 +117,43 @@ const PolicyDetailView = ({
               </div>
             </div>
             <Separator />
-            <div className="space-y-1.5">
-              <h4 className="text-sm font-medium flex items-center">
-                {Icons(currency.icon, "mr-1.5 h-3.5 text-muted-foreground")}
-                {/* <LucideDollarSign className="mr-1.5 h-3.5 text-muted-foreground" /> */}
-                {t("headers:premium")}
-              </h4>
-              <p className="text-lg font-bold">
-                {formatCurrency(policyDetail.premium)}
-              </p>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-1.5">
+                <h4 className="text-sm font-medium flex items-center">
+                  <Currency className="mr-1.5 h-3.5 text-muted-foreground" />
+                  {t("policies:currency")}
+                </h4>
+                <p>{policyDetail.currency_code}</p>
+              </div>
+              <div className="space-y-1.5">
+                <h4 className="text-sm font-medium flex items-center">
+                  <Banknote className="mr-1.5 h-3.5 w-3.5 text-muted-foreground" />
+                  {t("policies:currency_rate")}
+                </h4>
+                <p>{policyDetail.currency_rate}</p>
+              </div>
+            </div>
+            <Separator />
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-1.5">
+                <h4 className="text-sm font-medium flex items-center">
+                  <Currency className="mr-1.5 h-3.5 text-muted-foreground" />
+                  {t("headers:premium")}
+                </h4>
+                <p className="text-lg font-bold">
+                  {formatCurrency(policyDetail.premium, {
+                    withSymbol: true,
+                    currencyCode: policyDetail.currency_code,
+                  })}
+                </p>
+              </div>
+              <div className="space-y-1.5">
+                <h4 className="text-sm font-medium flex items-center">
+                  <LucideCalendar className="mr-1.5 h-3.5 w-3.5 text-muted-foreground" />
+                  {t("common:payment_frequency")}
+                </h4>
+                <p>{t(`paymentFrequency:${policyDetail.payment_frequency}`)}</p>
+              </div>
             </div>
             <Separator />
             <div className="space-y-1.5">
@@ -119,13 +161,29 @@ const PolicyDetailView = ({
                 <LucideClipboardList className="mr-1.5 h-3.5 text-muted-foreground" />
                 {t("common:notes")}
               </h4>
-              <p>{policyDetail.notes}</p>
+              {policyDetail.underwriting_notes ? (
+                <p className="w-full">{policyDetail.underwriting_notes}</p>
+              ) : (
+                <div className="py-2"></div>
+              )}
             </div>
           </div>
         </TabsContent>
 
         <TabsContent value="coverage">
           <div className="mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 space-y-4">
+            <div className="space-y-1.5">
+              <h4 className="text-sm font-medium flex items-center">
+                <LucideUser className="mr-1.5 h-3.5 w.5 text-muted-foreground" />
+                {t("common:insured_properties")}
+              </h4>
+              {policyDetail.insured_properties ? (
+                <p>{policyDetail.insured_properties}</p>
+              ) : (
+                <div className="py-2"></div>
+              )}
+            </div>
+            <Separator />
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-1.5">
                 <h4 className="text-sm font-medium flex items-center">
@@ -133,36 +191,24 @@ const PolicyDetailView = ({
                   {t("common:coverage_amount")}
                 </h4>
                 <p className="text-lg font-bold">
-                  {formatCurrency(policyDetail.coverage)}
+                  {formatCurrency(policyDetail.coverage, {
+                    withSymbol: true,
+                    currencyCode: policyDetail.currency_code,
+                  })}
                 </p>
               </div>
               <div className="space-y-1.5">
                 <h4 className="text-sm font-medium flex items-center">
-                  {Icons(
-                    currency.icon,
-                    "mr-1.5 h-3.5 w-3.5 text-muted-foreground"
-                  )}
+                  <Currency className="mr-1.5 h-3.5 w-3.5 text-muted-foreground" />
                   {t("common:deductible")}
                 </h4>
-                <p>{formatCurrency(policyDetail.deductible)}</p>
+                <p>
+                  {formatCurrency(policyDetail.deductible, {
+                    withSymbol: true,
+                    currencyCode: policyDetail.currency_code,
+                  })}
+                </p>
               </div>
-            </div>
-            <Separator />
-            <div className="space-y-1.5">
-              <h4 className="text-sm font-medium flex items-center">
-                <LucideUser className="mr-1.5 h-3.5 w.5 text-muted-foreground" />
-                {t("common:beneficiaries")}
-              </h4>
-              <ul className="list-disc pl-5 space-y-1">
-                {policyDetail.beneficiaries
-                  ?.split(",")
-                  .map((beneficiary: string, index: number) => (
-                    <li className="text-sm" key={index}>
-                      {beneficiary}
-                    </li>
-                  ))}
-              </ul>
-              <div className="space-y-3"></div>
             </div>
           </div>
         </TabsContent>
@@ -236,6 +282,7 @@ const PolicyDetailView = ({
       onClose={onClose}
       title={t("policies:policy_details")}
       description={`Policy #${policyDetail.policy_number}`}
+      className="sm:max-w-[700px]"
       additionalInfo={
         <div
           className={cn(

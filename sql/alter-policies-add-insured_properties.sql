@@ -1,1 +1,0 @@
-alter table policies add insured_properties text DEFAULT NULL AFTER auto_renewal;

@@ -29,7 +29,7 @@ BEGIN
         premium_amount = p_premium_amt,
         coverage_amount = p_coverage_amt,
         deductible_amount = p_deductible_amt,
-        beneficiaries = p_beneficiaries,
+        insured_properties = p_insured_properties,
         underwriting_notes = p_uw_notes
 	WHERE id = p_policy_id;
 END //

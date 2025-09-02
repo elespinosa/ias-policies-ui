@@ -32,10 +32,21 @@ export const formatCurrency = (
   options: {
     minimumFractionDigits?: number;
     maximumFractionDigits?: number;
+    withSymbol?: boolean;
+    currencyCode?: string;
   } = {}
 ): string => {
-  const { minimumFractionDigits = 2, maximumFractionDigits = 2 } = options;
-  const currency = getDefaultCurrency();
+  const {
+    minimumFractionDigits = 2,
+    maximumFractionDigits = 2,
+    currencyCode,
+    withSymbol = true,
+  } = options;
+  let currencies = defaultCurrency(t);
+  let currency =
+    Object.values(currencies).find(
+      (currency) => currency.code === currencyCode
+    ) ?? getDefaultCurrency();
 
   const numericAmount =
     typeof amount === "string" ? parseFloat(amount) : amount;
@@ -49,10 +60,48 @@ export const formatCurrency = (
       minimumFractionDigits,
       maximumFractionDigits,
     });
-    return `${currency.symbol}${formatted}`;
+    return `${withSymbol ? currency.symbol : ""}${formatted}`;
   } catch (error) {
     // Fallback formatting
     const formatted = numericAmount.toFixed(maximumFractionDigits);
-    return `${currency.symbol}${formatted}`;
+    return `${withSymbol ? currency.symbol : ""}${formatted}`;
   }
+};
+
+/**
+ * Unformat a money string by removing currency symbols, commas, and other formatting
+ * @param formattedAmount - The formatted money string (e.g., "₱1,234.56", "$1,234.56", "1,234.56")
+ * @returns The numeric value as a number, or 0 if invalid
+ */
+export const unformatMoney = (formattedAmount: string | number): number => {
+  if (typeof formattedAmount === "number") {
+    return formattedAmount;
+  }
+
+  if (typeof formattedAmount !== "string") {
+    return 0;
+  }
+
+  // Remove all non-numeric characters except decimal points and minus signs
+  // This handles currency symbols (₱, $, €, £, etc.), commas, spaces, and other formatting
+  const cleanedString = formattedAmount
+    .replace(/[^\d.-]/g, "") // Remove everything except digits, decimal points, and minus signs
+    .replace(/^\./, "") // Remove leading decimal point
+    .replace(/\.(?=.*\.)/g, ""); // Remove all decimal points except the last one
+
+  const numericValue = parseFloat(cleanedString);
+
+  return isNaN(numericValue) ? 0 : numericValue;
+};
+
+/**
+ * Unformat a money string and return as a string (useful for form inputs)
+ * @param formattedAmount - The formatted money string
+ * @returns The numeric value as a string, or "0" if invalid
+ */
+export const unformatMoneyToString = (
+  formattedAmount: string | number
+): string => {
+  const numericValue = unformatMoney(formattedAmount);
+  return numericValue.toString();
 };

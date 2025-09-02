@@ -4,12 +4,22 @@ export interface DatabaseTable {
   description?: string;
   urlEndpoint?: string;
   columns: DatabaseColumn[];
+  additionalColumns?: DatabaseColumn[];
 }
 
 export interface DatabaseColumn {
   name: string;
   displayName: string;
-  dataType: 'VARCHAR' | 'INT' | 'DATE' | 'BOOLEAN' | 'DECIMAL' | 'TEXT' | 'DATETIME' | 'ENUM' | 'TIMESTAMP';
+  dataType:
+    | "VARCHAR"
+    | "INT"
+    | "DATE"
+    | "BOOLEAN"
+    | "DECIMAL"
+    | "TEXT"
+    | "DATETIME"
+    | "ENUM"
+    | "TIMESTAMP";
   required: boolean;
   maxLength?: number;
   defaultValue?: string;
@@ -20,7 +30,7 @@ export interface FileData {
   headers: string[];
   rows: (string | number | null)[][];
   fileName: string;
-  fileType: 'csv' | 'xlsx';
+  fileType: "csv" | "xlsx";
   fileSize: number;
 }
 
@@ -53,4 +63,6 @@ export interface ImportResult {
   successfulRows: number;
   failedRows: number;
   errors: ValidationError[];
+  importedRows: any[];
+  failedRowsData: any[];
 }

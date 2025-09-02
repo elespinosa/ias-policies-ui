@@ -2,6 +2,7 @@
   "common": {
     "cancel": "Cancel",
     "update": "Update",
+    "create": "Create",
     "actions": "Actions",
     "policies": "Policies",
     "upload_policies": "Upload Policies",
@@ -24,12 +25,17 @@
     "documents": "Documents",
     "type": "Type",
     "client": "Client",
+    "product_name": "Product Name",
+    "payment_frequency": "Payment Frequency",
     "start_date": "Start Date",
     "end_date": "End Date",
     "notes": "Notes",
     "deductible": "Deductible",
     "coverage_amount": "Coverage Amount",
-    "beneficiaries": "Beneficiaries"
+    "insured_properties": "Insured Properties",
+    "select": "Select",
+    "use_selected_quote": "Use Selected Quote",
+    "search_quote": "Search Quote"
   },
   "messages": {
     "csrf_error": "Failed to refresh security token.",
@@ -56,7 +62,21 @@
     "type": "Type",
     "client": "Client",
     "actions": "Actions",
-    "period": "Period"
+    "period": "Period",
+    "name": "Name",
+    "email": "Email",
+    "customer_type": "Customer Type",
+    "amount": "Amount",
+    "quote_#": "Quote #",
+    "client_name": "Client Name",
+    "select": "Select"
+  },
+  "customerType": {
+    "existing": "Existing",
+    "prospect": "Prospect",
+    "vip": "VIP",
+    "dormant": "Dormant",
+    "government": "Government"
   },
   "currency": {
     "peso": "Peso",
@@ -111,6 +131,8 @@
     }
   },
   "payments": {
+    "amount": "Amount",
+    "amount_placeholder": "Enter amount",
     "mark_as_collected": "Mark as Collected",
     "mark_as_collected_description": "Enter the reference number and date for the remitted payment.",
     "payment_details": "Payment Details",
@@ -128,7 +150,11 @@
   "policies": {
     "policy_details": "Policy Details",
     "edit_policy": "Edit Policy",
-    "edit_policy_subtitle": "Update an insurance policy.",
+    "new_policy": "New Policy",
+    "edit_policy_subtitle": "Update an insurance policy. Policy number: {{policyNumber}}",
+    "create_policy": "Create New Policy",
+    "create_policy_subtitle": "Create a new insurance policy either from existing quotes or with manual entry.",
+    "quote_policy_subtitle": "Create a new insurance policy from an existing quote. Quote number: {{quoteNumber}}",
     "cancel_policy": "Cancel Policy",
     "cancel_policy_description": "Cancel policy {{policyNo}}?",
     "cancellation_reason": "Cancellation Reason",
@@ -136,15 +162,24 @@
     "cancellation_date": "Cancellation Date",
     "cancellation_reason_required": "Cancellation reason is required",
     "policy_number": "Policy Number",
+    "ref_policy_number": "Ref. Policy Number",
     "insurance_type": "Insurance Type",
     "insurance_provider": "Insurance Provider",
     "insurance_provider_placeholder": "Select provider",
+    "insurance_product": "Insurance Product",
+    "insurance_product_placeholder": "Select Insurance Product",
     "client_name": "Client Name",
     "client_name_placeholder": "John Doe",
     "start_date": "Start Date",
     "end_date": "End Date",
+    "currency_placeholder": "Select Currency",
+    "currency": "Currency",
+    "currency_rate": "Currency Rate",
+    "currency_rate_placeholder": "Enter currency rate",
     "premium": "Premium",
     "premium_placeholder": "0.00",
+    "payment_frequency": "Payment Frequency",
+    "payment_frequency_placeholder": "Select Payment Frequency",
     "coverage_amount": "Coverage Amount",
     "coverage_amount_placeholder": "0.00",
     "deductible": "Deductible",
@@ -156,6 +191,7 @@
     "notes_placeholder": "Additional policy information...",
     "email_notification": "Email Notification",
     "email_notification_description": "Send an email to the client with policy details",
+    "search_client": "Search Client",
     "toast": {
       "success_exporting": {
         "description": "All Policies have been downloaded."
@@ -164,6 +200,13 @@
         "description": "An error occured while exporting policies."
       }
     }
+  },
+  "paymentFrequency": {
+    "monthly": "Monthly",
+    "quarterly": "Quarterly",
+    "semi-annual": "Semi-Annual",
+    "annual": "Annual",
+    "one-time": "One-Time"
   },
   "insuranceTypes": {
     "auto_insurance": "Auto Insurance",
@@ -174,6 +217,13 @@
     "personal_accident_insurance": "Personal Accident Insurance",
     "property_insurance": "Property Insurance",
     "surety_insurance": "Surety Insurance"
+  },
+  "quoteTypes": {
+    "auto_insurance": "Auto Insurance",
+    "home_insurance": "Home Insurance",
+    "health_insurance": "Health Insurance",
+    "travel_insurance": "Travel Insurance",
+    "other_insurance": "Other Insurance"
   },
   "metrics": {
     "total_policies": "Total Policies",
@@ -209,6 +259,13 @@
     "cancelled": "Cancelled",
     "expired": "Expired",
     "lapsed": "Lapsed"
+  },
+  "quoteStatus": {
+    "draft": "Draft",
+    "pending": "Pending",
+    "approved": "Approved",
+    "rejected": "Rejected",
+    "converted": "Converted"
   },
   "rowButtons": {
     "print": "Print",
@@ -301,7 +358,7 @@
     "failed": "Failed",
     "success_rate": "Success Rate",
     "import_errors": "Import Errors",
-    "n_errors": "{{n}} errors",
+    "n_errors": "{{n}} error(s)",
     "row_n": "Row {{n}}:",
     "column_column": "Column: {{column}}",
     "download_errors": "{{n}} errors occurred during import. Click \"Download Error Report\" to get a detailed CSV file.",
@@ -310,7 +367,13 @@
     "import_another_file": "Import Another File",
     "download_error_report": "Download Error Report",
     "view_imported_data": "View Imported Data",
+    "imported_data": "Imported Data",
+    "view_imported_data_description": "View the data that was imported.",
     "view_imported_data_toast_msg": "Redirecting to view imported data for {{displayName}}...",
+    "view_unimported_data": "View Unimported Data",
+    "unimported_data": "Unimported Data",
+    "view_unimported_data_description": "View the data that was not imported.",
+    "view_unimported_data_toast_msg": "Redirecting to view unimported data for {{displayName}}...",
     "import_summary": "Import Summary",
     "n_rows_successfully_imported": "{{n}} rows successfully imported",
     "n_rows_failed_to_import": "{{n}} rows failed to import",
@@ -330,6 +393,24 @@
     "import_failed": "Import Failed",
     "import_failed_msg": "An error occurred during import. Please try again.",
     "error_report_downloaded": "Error Report Downloaded",
-    "error_report_downloaded_msg": "Error report for {{fileName}} has been downloaded successfully."
+    "error_report_downloaded_msg": "Error report for {{fileName}} has been downloaded successfully.",
+    "policies": {
+      "client_id": "Client ID",
+      "ref_policy_number": "Ref. Policy Number",
+      "partner_id": "Partner ID",
+      "product_id": "Product ID",
+      "effective_date": "Effective Date",
+      "expiration_date": "Expiration Date",
+      "currency_code": "Currency Code",
+      "currency_rate": "Currency Rate",
+      "premium_amount": "Premium Amount",
+      "payment_frequency": "Payment Frequency",
+      "coverage_amount": "Coverage Amount",
+      "deductible_amount": "Deductible Amount",
+      "insured_properties": "Insured Properties",
+      "underwriting_notes": "Underwriting Notes",
+      "status": "Status",
+      "auto_renewal": "Auto Renewal"
+    }
   }
 }
