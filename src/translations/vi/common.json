@@ -94,6 +94,8 @@
   },
 
   "claims": {
+    "claim_added_success": "Yêu cầu Bồi thường Đã được Thêm Thành công",
+    "claim_added_success_description": "Yêu cầu bồi thường đã được thêm thành công",
     "create_new_claim": "Tạo Yêu cầu Bồi thường Mới",
     "create_new_claim_description": "Gửi yêu cầu bồi thường bảo hiểm mới bằng cách điền thông tin bên dưới.",
     "claim_details": "Chi tiết Yêu cầu Bồi thường",
@@ -134,20 +136,32 @@
     "amount": "Số tiền",
     "amount_placeholder": "Nhập số tiền",
     "mark_as_collected": "Đánh dấu là Đã thu",
-    "mark_as_collected_description": "Nhập số tham chiếu và ngày cho khoản thanh toán đã chuyển.",
+    "apply_payment": "Áp dụng Thanh toán",
+    "apply_payment_description": "Nhập số tiền, số tham chiếu và ngày cho khoản thanh toán đã chuyển.",
+    "payment_already_applied": "Thanh toán đã được áp dụng",
+    "payment_already_applied_description": "Thanh toán đã được áp dụng cho chính sách này",
     "payment_details": "Chi tiết Thanh toán",
     "reference_number": "Số tham chiếu",
     "reference_number_placeholder": "Nhập số tham chiếu",
     "date": "Ngày",
     "documents": "Tài liệu",
     "payment_documents": "Tài liệu Thanh toán",
-    "payment_documents_description": "Tải lên tài liệu hỗ trợ cho thanh toán này"
+    "payment_documents_description": "Tải lên tài liệu hỗ trợ cho thanh toán này",
+    "payment_applied": "Thanh toán đã được áp dụng thành công",
+    "payment_applied_description": "Thanh toán đã được áp dụng thành công",
+    "payment_details_required": "Chi tiết thanh toán là bắt buộc",
+    "amount_required": "Số tiền là bắt buộc",
+    "reference_number_required": "Số tham chiếu là bắt buộc",
+    "payment_date_required": "Ngày thanh toán là bắt buộc"
   },
   "renewals": {
+    "status_updated": "Trạng thái Đã Cập nhật",
     "for_renewal": "Để Gia hạn",
     "status_updated_description": "Trạng thái gia hạn đã được cập nhật thành '{{status}}'"
   },
   "policies": {
+    "policy_cancelled": "Chính sách Đã bị Hủy",
+    "policy_cancelled_description": "Chính sách đã được hủy thành công",
     "policy_details": "Chi tiết Chính sách",
     "edit_policy": "Chỉnh sửa Chính sách",
     "new_policy": "Chính sách Mới",
@@ -192,11 +206,34 @@
     "email_notification": "Thông báo Email",
     "email_notification_description": "Gửi email cho khách hàng với chi tiết chính sách",
     "search_client": "Tìm kiếm Khách hàng",
+    "search_client_placeholder": "Tìm kiếm khách hàng theo tên hoặc email",
+    "policy_created_from_quote": "Chính sách được tạo thành công từ báo giá",
+    "policy_created_from_quote_description": "Chính sách {{policyNumber}} đã được tạo cho {{clientName}} từ báo giá {{quoteNumber}}.",
+    "policy_created_successfully": "Chính sách được tạo thành công",
+    "policy_created_successfully_description": "Chính sách {{policyNumber}} đã được tạo cho {{clientName}}.",
+    "policy_updated_successfully": "Chính sách được cập nhật thành công",
+    "policy_updated_successfully_description": "Chính sách {{policyNumber}} đã được cập nhật cho {{clientName}}.",
+    "client_id": "ID Khách hàng",
+    "partner_id": "ID Đối tác",
+    "product_id": "ID Sản phẩm",
+    "effective_date": "Ngày Có hiệu lực",
+    "expiration_date": "Ngày Hết hạn",
+    "currency_code": "Mã Tiền tệ",
+    "premium_amount": "Số tiền Phí bảo hiểm",
+    "deductible_amount": "Số tiền Khấu trừ",
+    "underwriting_notes": "Ghi chú Underwriting",
+    "auto_renewal": "Gia hạn Tự động",
     "toast": {
+      "exporting": {
+        "title": "Đang Xuất",
+        "description": "Tất cả Chính sách đang được xuất."
+      },
       "success_exporting": {
+        "title": "Xuất Thành công",
         "description": "Tất cả Chính sách đã được tải xuống."
       },
       "error_exporting": {
+        "title": "Lỗi Xuất",
         "description": "Đã xảy ra lỗi khi xuất chính sách."
       }
     }

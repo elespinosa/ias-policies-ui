@@ -94,6 +94,8 @@
   },
 
   "claims": {
+    "claim_added_success": "Anspruch erfolgreich hinzugefügt",
+    "claim_added_success_description": "Anspruch erfolgreich hinzugefügt",
     "create_new_claim": "Neuen Anspruch erstellen",
     "create_new_claim_description": "Reichen Sie einen neuen Versicherungsanspruch ein, indem Sie die unten stehenden Informationen ausfüllen.",
     "claim_details": "Anspruchsdetails",
@@ -134,20 +136,32 @@
     "amount": "Betrag",
     "amount_placeholder": "Betrag eingeben",
     "mark_as_collected": "Als eingezogen markieren",
-    "mark_as_collected_description": "Geben Sie die Referenznummer und das Datum für die überwiesene Zahlung ein.",
+    "apply_payment": "Zahlung anwenden",
+    "apply_payment_description": "Geben Sie den Betrag, die Referenznummer und das Datum für die überwiesene Zahlung ein.",
+    "payment_already_applied": "Zahlung bereits angewendet",
+    "payment_already_applied_description": "Zahlung bereits auf diese Richtlinie angewendet",
     "payment_details": "Zahlungsdetails",
     "reference_number": "Referenznummer",
     "reference_number_placeholder": "Referenznummer eingeben",
     "date": "Datum",
     "documents": "Dokumente",
     "payment_documents": "Zahlungsdokumente",
-    "payment_documents_description": "Laden Sie unterstützende Dokumente für diese Zahlung hoch"
+    "payment_documents_description": "Laden Sie unterstützende Dokumente für diese Zahlung hoch",
+    "payment_applied": "Zahlung erfolgreich angewendet",
+    "payment_applied_description": "Zahlung erfolgreich angewendet",
+    "payment_details_required": "Zahlungsdetails sind erforderlich",
+    "amount_required": "Betrag ist erforderlich",
+    "reference_number_required": "Referenznummer ist erforderlich",
+    "payment_date_required": "Zahlungsdatum ist erforderlich"
   },
   "renewals": {
+    "status_updated": "Status aktualisiert",
     "for_renewal": "Zur Verlängerung",
     "status_updated_description": "Verlängerungsstatus auf '{{status}}' aktualisiert"
   },
   "policies": {
+    "policy_cancelled": "Richtlinie storniert",
+    "policy_cancelled_description": "Richtlinie erfolgreich storniert",
     "policy_details": "Richtliniendetails",
     "edit_policy": "Richtlinie bearbeiten",
     "new_policy": "Neue Richtlinie",
@@ -192,11 +206,34 @@
     "email_notification": "E-Mail-Benachrichtigung",
     "email_notification_description": "Senden Sie eine E-Mail an den Kunden mit Richtliniendetails",
     "search_client": "Kunde suchen",
+    "search_client_placeholder": "Kunde nach Name oder E-Mail suchen",
+    "policy_created_from_quote": "Richtlinie erfolgreich aus Angebot erstellt",
+    "policy_created_from_quote_description": "Richtlinie {{policyNumber}} wurde für {{clientName}} aus Angebot {{quoteNumber}} erstellt.",
+    "policy_created_successfully": "Richtlinie erfolgreich erstellt",
+    "policy_created_successfully_description": "Richtlinie {{policyNumber}} wurde für {{clientName}} erstellt.",
+    "policy_updated_successfully": "Richtlinie erfolgreich aktualisiert",
+    "policy_updated_successfully_description": "Richtlinie {{policyNumber}} wurde für {{clientName}} aktualisiert.",
+    "client_id": "Kunden-ID",
+    "partner_id": "Partner-ID",
+    "product_id": "Produkt-ID",
+    "effective_date": "Gültigkeitsdatum",
+    "expiration_date": "Ablaufdatum",
+    "currency_code": "Währungscode",
+    "premium_amount": "Prämienbetrag",
+    "deductible_amount": "Selbstbeteiligungsbetrag",
+    "underwriting_notes": "Underwriting-Notizen",
+    "auto_renewal": "Automatische Verlängerung",
     "toast": {
+      "exporting": {
+        "title": "Exportieren",
+        "description": "Alle Richtlinien werden exportiert."
+      },
       "success_exporting": {
+        "title": "Export erfolgreich",
         "description": "Alle Richtlinien wurden heruntergeladen."
       },
       "error_exporting": {
+        "title": "Export-Fehler",
         "description": "Ein Fehler ist beim Exportieren der Richtlinien aufgetreten."
       }
     }

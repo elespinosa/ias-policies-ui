@@ -108,7 +108,6 @@ export interface PolicyDetailI {
 
 export const fetchPolicy = async (policyId: string | number) => {
   try {
-    console.log("policyId", policyId);
     const response = await api.get("/api/policyDetails", {
       params: { id: policyId },
     });

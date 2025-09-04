@@ -34,7 +34,7 @@ import {
   usePaymentFrequencyLovQuery,
   usePolicyProductsByTypeQuery,
 } from "@/hooks/queries/policiesQueries";
-import { toast } from "@/hooks/use-toast";
+import { showToastWithDescription } from "@/lib/toast";
 import { InsertUpdatePolicyI } from "@/lib/types";
 import {
   formatCurrency,
@@ -414,21 +414,34 @@ const EditPolicyModal: React.FC<EditPolicyModalProps> = ({
 
     if (type === "create") {
       if (fromQuote) {
-        toast({
-          title: "Policy created successfully from quote",
-          description: `Policy ${data.policyNumber} has been created for ${data.clientName} from quote ${selectedQuote.quote_number}.`,
-        });
+        showToastWithDescription(
+          t("policies:policy_created_from_quote"),
+          t("policies:policy_created_from_quote_description", {
+            policyNumber: data.policyNumber,
+            clientName: data.clientName,
+            quoteNumber: selectedQuote.quote_number,
+          }),
+          "success"
+        );
       } else {
-        toast({
-          title: "Policy created successfully",
-          description: `Policy ${data.policyNumber} has been created for ${data.clientName}.`,
-        });
+        showToastWithDescription(
+          t("policies:policy_created_successfully"),
+          t("policies:policy_created_successfully_description", {
+            policyNumber: data.policyNumber,
+            clientName: data.clientName,
+          }),
+          "success"
+        );
       }
     } else {
-      toast({
-        title: "Policy updated successfully",
-        description: `Policy ${data.policyNumber} has been updated for ${data.clientName}.`,
-      });
+      showToastWithDescription(
+        t("policies:policy_updated_successfully"),
+        t("policies:policy_updated_successfully_description", {
+          policyNumber: data.policyNumber,
+          clientName: data.clientName,
+        }),
+        "success"
+      );
     }
 
     onClose(() => {
@@ -457,7 +470,19 @@ const EditPolicyModal: React.FC<EditPolicyModalProps> = ({
     {
       id: "customer_type",
       render: (row: IClientLov) => {
-        return <>{t(`customerType:${row.customer_type}`)}</>;
+        return (
+          <>
+            {row.customer_type === null
+              ? "-"
+              : t(`customerType:${row.customer_type}`)}
+          </>
+        );
+      },
+    },
+    {
+      id: "email",
+      render: (row: IClientLov) => {
+        return <>{row.email === null ? "-" : row.email}</>;
       },
     },
   ];
@@ -594,7 +619,7 @@ const EditPolicyModal: React.FC<EditPolicyModalProps> = ({
                     lovDialogTitle={t("policies:search_client")}
                     lovDialogDescription={""}
                     lovDialogSearchPlaceholder={t(
-                      "claims:fields:search_placeholder"
+                      "policies:search_client_placeholder"
                     )}
                     lovDisabled={type === "edit"}
                     form={form}

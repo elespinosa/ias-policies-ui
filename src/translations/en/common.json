@@ -94,6 +94,8 @@
   },
 
   "claims": {
+    "claim_added_success": "Claim Added Successfully",
+    "claim_added_success_description": "Claim added successfully",
     "create_new_claim": "Create New Claim",
     "create_new_claim_description": "Submit a new insurance claim by filling out the information below.",
     "claim_details": "Claim Details",
@@ -134,20 +136,32 @@
     "amount": "Amount",
     "amount_placeholder": "Enter amount",
     "mark_as_collected": "Mark as Collected",
-    "mark_as_collected_description": "Enter the reference number and date for the remitted payment.",
+    "apply_payment": "Apply Payment",
+    "apply_payment_description": "Enter the amount, reference number and date for the remitted payment.",
+    "payment_already_applied": "Payment already applied",
+    "payment_already_applied_description": "Payment already applied to this policy",
     "payment_details": "Payment Details",
     "reference_number": "Reference Number",
     "reference_number_placeholder": "Enter reference number",
     "date": "Date",
     "documents": "Documents",
     "payment_documents": "Payment Documents",
-    "payment_documents_description": "Upload supporting documents for this payment"
+    "payment_documents_description": "Upload supporting documents for this payment",
+    "payment_applied": "Payment applied successfully",
+    "payment_applied_description": "Payment applied successfully",
+    "payment_details_required": "Payment details are required",
+    "amount_required": "Amount is required",
+    "reference_number_required": "Reference number is required",
+    "payment_date_required": "Payment date is required"
   },
   "renewals": {
+    "status_updated": "Status Updated",
     "for_renewal": "For Renewal",
     "status_updated_description": "Renewal status updated to '{{status}}'"
   },
   "policies": {
+    "policy_cancelled": "Policy Cancelled",
+    "policy_cancelled_description": "Policy cancelled successfully",
     "policy_details": "Policy Details",
     "edit_policy": "Edit Policy",
     "new_policy": "New Policy",
@@ -192,11 +206,35 @@
     "email_notification": "Email Notification",
     "email_notification_description": "Send an email to the client with policy details",
     "search_client": "Search Client",
+    "search_client_placeholder": "Search client by name or email",
+    "policy_created_from_quote": "Policy created successfully from quote",
+    "policy_created_from_quote_description": "Policy {{policyNumber}} has been created for {{clientName}} from quote {{quoteNumber}}.",
+    "policy_created_successfully": "Policy created successfully",
+    "policy_created_successfully_description": "Policy {{policyNumber}} has been created for {{clientName}}.",
+    "policy_updated_successfully": "Policy updated successfully",
+    "policy_updated_successfully_description": "Policy {{policyNumber}} has been updated for {{clientName}}.",
+    "client_id": "Client ID",
+    "partner_id": "Partner ID",
+    "product_id": "Product ID",
+    "effective_date": "Effective Date",
+    "expiration_date": "Expiration Date",
+    "currency_code": "Currency Code",
+    "premium_amount": "Premium Amount",
+    "deductible_amount": "Deductible Amount",
+    "underwriting_notes": "Underwriting Notes",
+    "status": "Status",
+    "auto_renewal": "Auto Renewal",
     "toast": {
+      "exporting": {
+        "title": "Exporting",
+        "description": "All Policies are being exported."
+      },
       "success_exporting": {
+        "title": "Success Exporting",
         "description": "All Policies have been downloaded."
       },
       "error_exporting": {
+        "title": "Error Exporting",
         "description": "An error occured while exporting policies."
       }
     }
@@ -394,23 +432,6 @@
     "import_failed_msg": "An error occurred during import. Please try again.",
     "error_report_downloaded": "Error Report Downloaded",
     "error_report_downloaded_msg": "Error report for {{fileName}} has been downloaded successfully.",
-    "policies": {
-      "client_id": "Client ID",
-      "ref_policy_number": "Ref. Policy Number",
-      "partner_id": "Partner ID",
-      "product_id": "Product ID",
-      "effective_date": "Effective Date",
-      "expiration_date": "Expiration Date",
-      "currency_code": "Currency Code",
-      "currency_rate": "Currency Rate",
-      "premium_amount": "Premium Amount",
-      "payment_frequency": "Payment Frequency",
-      "coverage_amount": "Coverage Amount",
-      "deductible_amount": "Deductible Amount",
-      "insured_properties": "Insured Properties",
-      "underwriting_notes": "Underwriting Notes",
-      "status": "Status",
-      "auto_renewal": "Auto Renewal"
-    }
+    "row_no": "Row #"
   }
 }

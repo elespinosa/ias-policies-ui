@@ -1,4 +1,5 @@
 import { PolicyListing } from "@/lib/types";
+import { fetchPaymentByPolicy } from "@/services/paymentServices";
 import {
   fetchClientsLov,
   fetchCurrencyLov,
@@ -203,6 +204,24 @@ export const useQuotesLovQuery = (
       return response;
     },
     enabled: true,
+    ...defaultConfig,
+    ...config,
+  });
+};
+
+// Payment by policy query
+export const usePaymentByPolicyQuery = (
+  policyId: number | null,
+  config?: PolicyQueryConfig
+) => {
+  return useQuery({
+    queryKey: ["paymentByPolicy", policyId],
+    queryFn: async () => {
+      if (!policyId) return [];
+      const response = await fetchPaymentByPolicy(policyId);
+      return response;
+    },
+    enabled: !!policyId,
     ...defaultConfig,
     ...config,
   });

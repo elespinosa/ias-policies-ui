@@ -59,17 +59,7 @@ export const markPayment = async (
 
 // get payment based on policy_id
 interface Payment {
-  policy_id: number;
-  payment_id?: number;
-  policy_number: string;
-  client: string;
-  provider: string;
-  type: string;
-  premium: number;
-  status: string;
-  reference_no: string;
-  due_date: string;
-  date: string;
+  total_amount: string | number;
 }
 
 export const fetchPaymentByPolicy = async (policy_id: number) => {
@@ -84,6 +74,21 @@ export const fetchPaymentByPolicy = async (policy_id: number) => {
     throw new Error(
       "Failed to fetch fetchPaymentByPolicy: " +
         (error.message || "Unknown error")
+    );
+  }
+};
+
+export const applyPayment = async (paymentDetails: {
+  policy_id: number;
+  amount: number;
+  reference_no: string;
+  payment_date: string;
+}) => {
+  try {
+    await api.post("/api/policy-apply-payment", paymentDetails);
+  } catch (error: any) {
+    throw new Error(
+      "Failed to apply payment: " + (error.message || "Unknown error")
     );
   }
 };

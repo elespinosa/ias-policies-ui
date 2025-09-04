@@ -215,6 +215,85 @@ export const getHeaderLists = (t: (key: string) => string) => {
       accessor: "policy_type",
       align: "",
     },
+
+    row_no: {
+      id: "row_no",
+      label: t("uploading:row_no"),
+      accessor: "row_no",
+      align: "",
+    },
+    ref_policy_number: {
+      id: "ref_policy_number",
+      label: t("policies:ref_policy_number"),
+      accessor: "ref_policy_number",
+      align: "",
+    },
+    client_id: {
+      id: "client_id",
+      label: t("policies:client_id"),
+      accessor: "client_id",
+      align: "",
+    },
+    partner_id: {
+      id: "partner_id",
+      label: t("policies:partner_id"),
+      accessor: "partner_id",
+      align: "",
+    },
+    product_id: {
+      id: "product_id",
+      label: t("policies:product_id"),
+      accessor: "product_id",
+      align: "",
+    },
+    effective_date: {
+      id: "effective_date",
+      label: t("policies:effective_date"),
+      accessor: "effective_date",
+      align: "",
+    },
+    expiration_date: {
+      id: "expiration_date",
+      label: t("policies:expiration_date"),
+      accessor: "expiration_date",
+      align: "",
+    },
+    currency_code: {
+      id: "currency_code",
+      label: t("policies:currency_code"),
+      accessor: "currency_code",
+      align: "right",
+    },
+    currency_rate: {
+      id: "currency_rate",
+      label: t("policies:currency_rate"),
+      accessor: "currency_rate",
+      align: "right",
+    },
+    premium_amount: {
+      id: "premium_amount",
+      label: t("policies:premium_amount"),
+      accessor: "premium_amount",
+      align: "right",
+    },
+    payment_frequency: {
+      id: "payment_frequency",
+      label: t("policies:payment_frequency"),
+      accessor: "payment_frequency",
+      align: "",
+    },
+    coverage_amount: {
+      id: "coverage_amount",
+      label: t("policies:coverage_amount"),
+      accessor: "coverage_amount",
+      align: "right",
+    },
+    deductible_amount: {
+      id: "deductible_amount",
+      label: t("policies:deductible_amount"),
+      accessor: "deductible_amount",
+      align: "right",
+    },
   };
 };
 

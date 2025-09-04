@@ -101,7 +101,8 @@ export type PolicyListing = {
   period: string;
   policy_number: string;
   currency_code: string;
-  premium: number;
+  currency_rate: number | string;
+  premium: number | string;
   provider: string;
   status: string;
   total_records: number;

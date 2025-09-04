@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useToast } from "@/hooks/use-toast";
+import { showToastWithDescription } from "@/lib/toast";
 import { FileData } from "@/types/import";
 import { parseFile } from "@/utils/fileParser";
 import { CheckCircle, FileSpreadsheet, Upload } from "lucide-react";
@@ -24,7 +24,6 @@ export const FileUpload: React.FC<FileUploadProps> = ({
   fileData,
 }) => {
   const { t } = useTranslation();
-  const { toast } = useToast();
   const [isDragOver, setIsDragOver] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
 
@@ -36,11 +35,11 @@ export const FileUpload: React.FC<FileUploadProps> = ({
       const fileExtension = file.name.split(".").pop()?.toLowerCase();
 
       if (!["xlsx", "xls", "csv"].includes(fileExtension || "")) {
-        toast({
-          title: t("uploading:invalid_file_type"),
-          description: t("uploading:invalid_file_type_description"),
-          variant: "destructive",
-        });
+        showToastWithDescription(
+          t("uploading:invalid_file_type"),
+          t("uploading:invalid_file_type_description"),
+          "error"
+        );
         return;
       }
 
@@ -48,27 +47,27 @@ export const FileUpload: React.FC<FileUploadProps> = ({
       try {
         const parsedData = await parseFile(file);
         onFileLoaded(parsedData);
-        toast({
-          title: t("uploading:file_uploaded_successfully"),
-          description: t("uploading:file_uploaded_successfully_description", {
+        showToastWithDescription(
+          t("uploading:file_uploaded_successfully"),
+          t("uploading:file_uploaded_successfully_description", {
             rows: parsedData.rows.length,
             columns: parsedData.headers.length,
           }),
-        });
+          "success"
+        );
       } catch (error) {
-        toast({
-          title: t("uploading:file_parse_error"),
-          description:
-            error instanceof Error
-              ? error.message
-              : t("uploading:file_parse_error_msg"),
-          variant: "destructive",
-        });
+        showToastWithDescription(
+          t("uploading:file_parse_error"),
+          error instanceof Error
+            ? error.message
+            : t("uploading:file_parse_error_msg"),
+          "error"
+        );
       } finally {
         setIsLoading(false);
       }
     },
-    [onFileLoaded, toast]
+    [onFileLoaded]
   );
 
   const handleDrop = useCallback(

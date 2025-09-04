@@ -94,6 +94,8 @@
   },
 
   "claims": {
+    "claim_added_success": "Reclamación Agregada Exitosamente",
+    "claim_added_success_description": "Reclamación agregada exitosamente",
     "create_new_claim": "Crear Nueva Reclamación",
     "create_new_claim_description": "Envíe una nueva reclamación de seguro completando la información a continuación.",
     "claim_details": "Detalles de la Reclamación",
@@ -134,20 +136,32 @@
     "amount": "Monto",
     "amount_placeholder": "Ingrese monto",
     "mark_as_collected": "Marcar como Cobrado",
-    "mark_as_collected_description": "Ingrese el número de referencia y fecha del pago remitido.",
+    "apply_payment": "Aplicar Pago",
+    "apply_payment_description": "Ingrese el monto, número de referencia y fecha del pago remitido.",
+    "payment_already_applied": "Pago ya aplicado",
+    "payment_already_applied_description": "Pago ya aplicado a esta póliza",
     "payment_details": "Detalles del Pago",
     "reference_number": "Número de Referencia",
     "reference_number_placeholder": "Ingrese número de referencia",
     "date": "Fecha",
     "documents": "Documentos",
     "payment_documents": "Documentos de Pago",
-    "payment_documents_description": "Suba documentos de respaldo para este pago"
+    "payment_documents_description": "Suba documentos de respaldo para este pago",
+    "payment_applied": "Pago aplicado exitosamente",
+    "payment_applied_description": "Pago aplicado exitosamente",
+    "payment_details_required": "Los detalles del pago son requeridos",
+    "amount_required": "El monto es requerido",
+    "reference_number_required": "El número de referencia es requerido",
+    "payment_date_required": "La fecha del pago es requerida"
   },
   "renewals": {
+    "status_updated": "Estado Actualizado",
     "for_renewal": "Para Renovación",
     "status_updated_description": "Estado de renovación actualizado a '{{status}}'"
   },
   "policies": {
+    "policy_cancelled": "Póliza Cancelada",
+    "policy_cancelled_description": "Póliza cancelada exitosamente",
     "policy_details": "Detalles de la Póliza",
     "edit_policy": "Editar Póliza",
     "new_policy": "Nueva Póliza",
@@ -192,11 +206,34 @@
     "email_notification": "Notificación por Correo",
     "email_notification_description": "Enviar un correo electrónico al cliente con los detalles de la póliza",
     "search_client": "Buscar Cliente",
+    "search_client_placeholder": "Buscar cliente por nombre o email",
+    "policy_created_from_quote": "Póliza creada exitosamente desde cotización",
+    "policy_created_from_quote_description": "La póliza {{policyNumber}} ha sido creada para {{clientName}} desde la cotización {{quoteNumber}}.",
+    "policy_created_successfully": "Póliza creada exitosamente",
+    "policy_created_successfully_description": "La póliza {{policyNumber}} ha sido creada para {{clientName}}.",
+    "policy_updated_successfully": "Póliza actualizada exitosamente",
+    "policy_updated_successfully_description": "La póliza {{policyNumber}} ha sido actualizada para {{clientName}}.",
+    "client_id": "ID del Cliente",
+    "partner_id": "ID del Socio",
+    "product_id": "ID del Producto",
+    "effective_date": "Fecha de Vigencia",
+    "expiration_date": "Fecha de Vencimiento",
+    "currency_code": "Código de Moneda",
+    "premium_amount": "Monto de Prima",
+    "deductible_amount": "Monto de Deducible",
+    "underwriting_notes": "Notas de Suscripción",
+    "auto_renewal": "Renovación Automática",
     "toast": {
+      "exporting": {
+        "title": "Exportando",
+        "description": "Todas las Pólizas están siendo exportadas."
+      },
       "success_exporting": {
+        "title": "Exportación Exitosa",
         "description": "Todas las Pólizas han sido descargadas."
       },
       "error_exporting": {
+        "title": "Error de Exportación",
         "description": "Ocurrió un error al exportar las pólizas."
       }
     }

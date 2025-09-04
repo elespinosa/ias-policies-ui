@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { useToast } from "@/hooks/use-toast";
+import { showToastWithDescription } from "@/lib/toast";
 import { ImportResult } from "@/types/import";
 import { downloadErrorReport, ErrorReportData } from "@/utils/errorReport";
 import {
@@ -39,7 +39,6 @@ export const ImportResults: React.FC<ImportResultsProps> = ({
   fileName,
   tableName,
 }) => {
-  const { toast } = useToast();
   const { t } = useTranslation();
 
   if (isImporting) {
@@ -239,12 +238,12 @@ export const ImportResults: React.FC<ImportResultsProps> = ({
                   errors: result.errors,
                 };
                 downloadErrorReport(errorReportData);
-                toast({
-                  title: t("uploading:error_report_downloaded"),
-                  description: t("uploading:error_report_downloaded_msg", {
+                showToastWithDescription(
+                  t("uploading:error_report_downloaded"),
+                  t("uploading:error_report_downloaded_msg", {
                     fileName: fileName,
-                  }),
-                });
+                  })
+                );
               }}
             >
               <Download className="h-4 w-4" />

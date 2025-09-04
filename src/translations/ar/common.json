@@ -94,6 +94,8 @@
   },
 
   "claims": {
+    "claim_added_success": "تم إضافة المطالبة بنجاح",
+    "claim_added_success_description": "تم إضافة المطالبة بنجاح",
     "create_new_claim": "إنشاء مطالبة جديدة",
     "create_new_claim_description": "قدم مطالبة تأمين جديدة عن طريق ملء المعلومات أدناه.",
     "claim_details": "تفاصيل المطالبة",
@@ -134,20 +136,32 @@
     "amount": "المبلغ",
     "amount_placeholder": "أدخل المبلغ",
     "mark_as_collected": "وضع علامة كمقبوض",
-    "mark_as_collected_description": "أدخل رقم المرجع والتاريخ للدفعة المرسلة.",
+    "apply_payment": "تطبيق الدفع",
+    "apply_payment_description": "أدخل المبلغ ورقم المرجع والتاريخ للدفعة المرسلة.",
+    "payment_already_applied": "تم تطبيق الدفع بالفعل",
+    "payment_already_applied_description": "تم تطبيق الدفع على هذه السياسة بالفعل",
     "payment_details": "تفاصيل الدفع",
     "reference_number": "رقم المرجع",
     "reference_number_placeholder": "أدخل رقم المرجع",
     "date": "التاريخ",
     "documents": "المستندات",
     "payment_documents": "مستندات الدفع",
-    "payment_documents_description": "ارفع المستندات الداعمة لهذا الدفع"
+    "payment_documents_description": "ارفع المستندات الداعمة لهذا الدفع",
+    "payment_applied": "تم تطبيق الدفع بنجاح",
+    "payment_applied_description": "تم تطبيق الدفع بنجاح",
+    "payment_details_required": "تفاصيل الدفع مطلوبة",
+    "amount_required": "المبلغ مطلوب",
+    "reference_number_required": "رقم المرجع مطلوب",
+    "payment_date_required": "تاريخ الدفع مطلوب"
   },
   "renewals": {
+    "status_updated": "تم تحديث الحالة",
     "for_renewal": "للتجديد",
     "status_updated_description": "تم تحديث حالة التجديد إلى '{{status}}'"
   },
   "policies": {
+    "policy_cancelled": "تم إلغاء السياسة",
+    "policy_cancelled_description": "تم إلغاء السياسة بنجاح",
     "policy_details": "تفاصيل السياسة",
     "edit_policy": "تعديل السياسة",
     "new_policy": "سياسة جديدة",
@@ -192,11 +206,34 @@
     "email_notification": "إشعار البريد الإلكتروني",
     "email_notification_description": "إرسال بريد إلكتروني للعميل مع تفاصيل السياسة",
     "search_client": "البحث عن العميل",
+    "search_client_placeholder": "البحث عن العميل بالاسم أو البريد الإلكتروني",
+    "policy_created_from_quote": "تم إنشاء السياسة بنجاح من العرض",
+    "policy_created_from_quote_description": "تم إنشاء السياسة {{policyNumber}} للعميل {{clientName}} من العرض {{quoteNumber}}.",
+    "policy_created_successfully": "تم إنشاء السياسة بنجاح",
+    "policy_created_successfully_description": "تم إنشاء السياسة {{policyNumber}} للعميل {{clientName}}.",
+    "policy_updated_successfully": "تم تحديث السياسة بنجاح",
+    "policy_updated_successfully_description": "تم تحديث السياسة {{policyNumber}} للعميل {{clientName}}.",
+    "client_id": "معرف العميل",
+    "partner_id": "معرف الشريك",
+    "product_id": "معرف المنتج",
+    "effective_date": "تاريخ السريان",
+    "expiration_date": "تاريخ الانتهاء",
+    "currency_code": "رمز العملة",
+    "premium_amount": "مبلغ القسط",
+    "deductible_amount": "مبلغ الخصم",
+    "underwriting_notes": "ملاحظات الاكتتاب",
+    "auto_renewal": "تجديد تلقائي",
     "toast": {
+      "exporting": {
+        "title": "جاري التصدير",
+        "description": "جاري تصدير جميع السياسات."
+      },
       "success_exporting": {
+        "title": "تم التصدير بنجاح",
         "description": "تم تحميل جميع السياسات."
       },
       "error_exporting": {
+        "title": "خطأ في التصدير",
         "description": "حدث خطأ أثناء تصدير السياسات."
       }
     }

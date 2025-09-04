@@ -46,12 +46,13 @@ import {
   usePolicyTypesQuery,
 } from "@/hooks/queries/policiesQueries";
 import { Claim } from "@/interfaces/claim-interfaces";
-import { showToast } from "@/lib/toast";
+import { showToast, showToastWithDescription } from "@/lib/toast";
 import { PolicyListing } from "@/lib/types";
-import { formatCurrency } from "@/lib/utils";
-import { fetchPaymentByPolicy, markPayment } from "@/services/paymentServices";
+import { formatCurrency, unformatMoney } from "@/lib/utils";
+import { applyPayment, fetchPaymentByPolicy } from "@/services/paymentServices";
 import {
   cancelPolicy,
+  fetchPolicy,
   generateCSVExcel,
   getTableOptions,
   getTotalPolicies,
@@ -69,14 +70,14 @@ import {
 } from "lucide-react";
 import React, { Fragment, useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import "../lib/i18n";
 
 export interface EditPaymentDetails {
-  payment_id?: number;
   policy_id: number;
-  policy_no: string;
-  amount?: string;
-  reference_no?: string;
-  date: string;
+  amount: number;
+  amountDisplay: string;
+  reference_no: string;
+  payment_date: string;
   documents?: Array<Document>;
 }
 
@@ -94,7 +95,7 @@ const Policies: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [filterProvider, setFilterProvider] = useState("");
   const [openPolicyDetail, setOpenPolicyDetail] = useState(false);
-  const [selectedPolicyId, setSelectedPolicyId] = useState<number | null>(null);
+  const [selectedPolicyId, setSelectedPolicyId] = useState<number | null>(0);
   const [policyListing, setPolicyListing] = useState<PolicyListing[]>([]);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [searchValue, setSearchValue] = useState("");
@@ -191,7 +192,7 @@ const Policies: React.FC = () => {
 
   const prepareTableDataForList = (dataList: PolicyListing[]) => {
     const moneyColumns = ["premium"];
-    const excludedColumns = ["currency_code"];
+    const excludedColumns = ["currency_code", "currency_rate"];
     const data = dataList?.map((el) => {
       const clonedData = { ...el };
       for (const column of moneyColumns) {
@@ -301,10 +302,12 @@ const Policies: React.FC = () => {
 
   const handleRenew = async (policyId: number) => {
     await renewPolicy(policyId);
-    showToast(
+    showToastWithDescription(
+      t("renewals:status_updated"),
       t("renewals:status_updated_description", {
         status: t("renewals:for_renewal"),
-      })
+      }),
+      "success"
     );
   };
 
@@ -323,52 +326,51 @@ const Policies: React.FC = () => {
   };
 
   const handleApplyPayment = async (policyId: number) => {
-    const payments = await fetchPaymentByPolicy(policyId);
-
-    let payment = payments.find(
-      (p) => p.status.toLocaleLowerCase() === "current"
-    );
-
-    if (!payment && payments.length > 0) {
-      payment = payments[0];
-    } else if (!payment && payments.length === 0) {
-      const policyDetail = policyList.find((p) => p.id === policyId);
-      if (!policyDetail) return;
-
-      payment = {
-        policy_id: policyDetail.id,
-        payment_id: null,
-        policy_number: policyDetail.policy_number,
-        client: policyDetail.client,
-        provider: policyDetail.provider,
-        type: policyDetail.type,
-        premium: policyDetail.premium,
-        status: "current",
-        reference_no: null,
-        due_date: null,
-        date: null,
-      };
+    let policyObj = policyDetail;
+    console.log("policyObj", policyObj);
+    if (!policyObj || policyObj[0]?.policy_id !== policyId) {
+      policyObj = await fetchPolicy(policyId);
     }
 
-    setPaymentDetails({
-      payment_id: payment.payment_id,
-      policy_id: payment.policy_id,
-      policy_no: payment["policy_#"],
-      reference_no: payment.reference_no,
-      date: payment.date,
-      documents: [
-        {
-          id: "id",
-          name: "name",
-          type: "pdf",
-          size: 100000,
-          dateUploaded: "2025-01-01",
-          url: "https://www.google.com",
-        },
-      ],
-    });
+    if (policyObj && policyObj.length > 0) {
+      const policy = policyObj[0];
+      const payments = await fetchPaymentByPolicy(policyId);
+      const totalAmount = payments.reduce(
+        (acc, curr) => acc + Number(curr.total_amount),
+        0
+      );
 
-    setIsEditPaymentOpen(true);
+      const totalPayable =
+        Number(policy.premium) * Number(policy.currency_rate) - totalAmount;
+
+      if (totalPayable > 0) {
+        setIsEditPaymentOpen(true);
+        setPaymentDetails({
+          policy_id: policy.policy_id,
+          amount: totalPayable,
+          amountDisplay: totalPayable.toString(),
+          reference_no: "",
+          payment_date: "",
+          documents: [
+            {
+              id: "id",
+              name: "name",
+              type: "pdf",
+              size: 100000,
+              dateUploaded: "2025-01-01",
+              url: "https://www.google.com",
+            },
+          ],
+        });
+      } else {
+        setSelectedPolicyId(null);
+        setPaymentDetails(null);
+        showToastWithDescription(
+          t("payments:payment_already_applied"),
+          t("payments:payment_already_applied_description")
+        );
+      }
+    }
   };
 
   const handleCancel = async (policyId: number) => {
@@ -417,26 +419,53 @@ const Policies: React.FC = () => {
   const handleAddClaim = (data: Claim) => {
     addClaimMutation.mutate(data, {
       onSuccess: () => {
-        showToast(t("common:claim_added_success"));
+        showToast(t("claims:claim_added_success"), "success");
         setIsAddClaimOpen(false);
         return true;
       },
       onError: (error: any) => {
-        showToast(error.message || t("common:error"), "error");
+        showToastWithDescription(
+          t("common:error"),
+          error.message || t("common:error"),
+          "error"
+        );
         return false;
       },
     });
   };
 
   const markAsPaid = async () => {
-    if (paymentDetails?.payment_id) {
-      await markPayment(
-        paymentDetails.payment_id,
-        "for_remittance",
-        paymentDetails.reference_no
-      );
+    if (!paymentDetails) {
+      showToast(t("payments:payment_details_required"), "error");
+      return;
     }
 
+    if (paymentDetails?.amount <= 0) {
+      showToast(t("payments:amount_required"), "error");
+      return;
+    }
+
+    if (!paymentDetails?.reference_no) {
+      showToast(t("payments:reference_number_required"), "error");
+      return;
+    }
+
+    if (!paymentDetails?.payment_date) {
+      showToast(t("payments:payment_date_required"), "error");
+      return;
+    }
+
+    await applyPayment(paymentDetails);
+    // Invalidate payment queries for this specific policy
+    queryClient.invalidateQueries({
+      queryKey: ["paymentByPolicy", paymentDetails.policy_id],
+    });
+    // Also invalidate all payment queries if needed
+    queryClient.invalidateQueries({
+      queryKey: ["paymentByPolicy"],
+    });
+    showToast(t("payments:payment_applied"), "success");
+    setPaymentDetails(null);
     setIsEditPaymentOpen(false);
   };
 
@@ -448,7 +477,11 @@ const Policies: React.FC = () => {
       }
 
       await cancelPolicy(selectedPolicy.id, cancellationReason);
-      showToast(t("policies:policy_cancelled"));
+      showToastWithDescription(
+        t("policies:policy_cancelled"),
+        t("policies:policy_cancelled_description"),
+        "success"
+      );
       queryClient.invalidateQueries({ queryKey: ["policies"] });
       queryClient.invalidateQueries({
         queryKey: ["policyDetail", selectedPolicy.id],
@@ -462,10 +495,9 @@ const Policies: React.FC = () => {
 
   const handleCsvExcelDownload = async (type: String) => {
     try {
-      showToast(
-        t("policies:toast.exporting.description", {
-          type: type === "xlsx" ? "EXCEL" : "CSV",
-        })
+      showToastWithDescription(
+        t("policies:toast.exporting.title"),
+        t("policies:toast.exporting.description")
       );
 
       const endpoint = `get-all-policies?p_search=${encodeURIComponent(
@@ -483,13 +515,19 @@ const Policies: React.FC = () => {
       link.click();
       document.body.removeChild(link);
 
-      showToast(
+      showToastWithDescription(
+        t("policies:toast.success_exporting.title"),
         t("policies:toast.success_exporting.description", {
           type: type === "xlsx" ? "EXCEL" : "CSV",
-        })
+        }),
+        "success"
       );
     } catch (e) {
-      showToast(t("policies:toast.error_exporting.description"), "error");
+      showToastWithDescription(
+        t("policies:toast.error_exporting.title"),
+        t("policies:toast.error_exporting.description"),
+        "error"
+      );
     }
   };
 
@@ -709,12 +747,22 @@ const Policies: React.FC = () => {
       />
 
       {/* Edit Payment Dialog */}
-      <Dialog open={isEditPaymentOpen} onOpenChange={setIsEditPaymentOpen}>
+      <Dialog
+        open={isEditPaymentOpen}
+        onOpenChange={(open) => {
+          if (!open) {
+            setPaymentDetails(null);
+            setSelectedPolicyId(null);
+            setSelectedPolicy(null);
+          }
+          setIsEditPaymentOpen(open);
+        }}
+      >
         <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>{t(`payments:mark_as_collected`)}</DialogTitle>
+            <DialogTitle>{t(`payments:apply_payment`)}</DialogTitle>
             <DialogDescription>
-              {t(`payments:mark_as_collected_description`)}
+              {t(`payments:apply_payment_description`)}
             </DialogDescription>
           </DialogHeader>
           <div className="w-full">
@@ -742,16 +790,31 @@ const Policies: React.FC = () => {
                     </Label>
                     <div className="items-center gap-4">
                       <Input
+                        className="w-full"
                         id="edit-amount"
                         placeholder={t("payments:amount_placeholder")}
-                        value={paymentDetails?.amount || ""}
+                        value={paymentDetails?.amountDisplay || ""}
+                        autoFocus={false}
+                        onFocus={(e) => {
+                          e.target.value =
+                            paymentDetails?.amount.toString() || "";
+                        }}
                         onChange={(e) =>
                           setPaymentDetails({
                             ...paymentDetails,
-                            amount: e.target.value,
+                            amountDisplay: e.target.value,
                           })
                         }
-                        className="w-full"
+                        onBlur={(e) => {
+                          const amount = unformatMoney(e.target.value);
+                          setPaymentDetails({
+                            ...paymentDetails,
+                            amount: amount,
+                            amountDisplay: formatCurrency(amount, {
+                              withSymbol: true,
+                            }),
+                          });
+                        }}
                       />
                     </div>
                   </div>
@@ -785,12 +848,14 @@ const Policies: React.FC = () => {
                           id="edit-date"
                           type="date"
                           value={
-                            paymentDetails?.date ? paymentDetails.date : ""
+                            paymentDetails?.payment_date
+                              ? paymentDetails.payment_date
+                              : ""
                           }
                           onChange={(e) =>
                             setPaymentDetails({
                               ...paymentDetails,
-                              date: e.target.value,
+                              payment_date: e.target.value,
                             })
                           }
                           className="pl-8"
@@ -836,9 +901,7 @@ const Policies: React.FC = () => {
             >
               {t("common:cancel")}
             </Button>
-            <Button onClick={markAsPaid}>
-              {t("payments:mark_as_collected")}
-            </Button>
+            <Button onClick={markAsPaid}>{t("payments:apply_payment")}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -848,15 +911,25 @@ const Policies: React.FC = () => {
         mode={claimAction}
         onClose={() => {
           setIsAddClaimOpen(false);
+          setSelectedClaim(null);
+          setSelectedPolicyId(null);
+          setSelectedPolicy(null);
           setClaimAction("create");
-          // setClaimId(null);
         }}
         claimTypes={policyTypes || []}
         data={selectedClaim}
         onAdd={handleAddClaim}
       />
 
-      <Dialog open={isCancelPolicyOpen} onOpenChange={setIsCancelPolicyOpen}>
+      <Dialog
+        open={isCancelPolicyOpen}
+        onOpenChange={(open) => {
+          setIsCancelPolicyOpen(open);
+          setSelectedPolicy(null);
+          setSelectedPolicyId(null);
+          setCancellationReason("");
+        }}
+      >
         <DialogContent>
           <DialogHeader>
             <DialogTitle>{t(`policies:cancel_policy`)}</DialogTitle>

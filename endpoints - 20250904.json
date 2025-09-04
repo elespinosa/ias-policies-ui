@@ -906,7 +906,7 @@
     "method": "GET",
     "url": "/api/payment-by-policy",
     "requireToken": false,
-    "sqlQuery": "SELECT CASE WHEN SUM(amount) IS NULL THEN 0 ELSE SUM(amount) END total_amount\n  FROM payments\n WHERE policy_id = :p_policy_id",
+    "sqlQuery": "SELECT policy_id, id as \"payment_id\", policy_number, client_name as 'client', \n\t\tpartner_name AS 'provider', product_name AS type,\n        premium, status, transaction_reference as 'reference_no', DATE_FORMAT(due_date, '%Y-%m-%m') as due_date, DATE_FORMAT(date, '%Y-%m-%m') as date\n  FROM payment_listing_v\n WHERE policy_id = :p_policy_id\n ORDER BY status",
     "sqlProcedure": "",
     "pathParams": [],
     "queryParams": [
@@ -921,51 +921,6 @@
     ],
     "payloadParams": [],
     "status": "active",
-    "lastUsed": "2025-09-03T03:30:35.308Z"
-  },
-  {
-    "id": "endpoint_1756883781264",
-    "name": "Policy Apply Payment",
-    "method": "POST",
-    "url": "/api/policy-apply-payment",
-    "requireToken": false,
-    "sqlQuery": "",
-    "sqlProcedure": "CALL apply_payment (:policy_id, :amount, :reference_no, :payment_date)",
-    "pathParams": [],
-    "queryParams": [
-      {
-        "name": "payment_date",
-        "type": "date",
-        "required": true,
-        "dateConstraints": {
-          "dateFormat": "YYYY-MM-DD"
-        }
-      },
-      {
-        "name": "reference_no",
-        "type": "string",
-        "required": true,
-        "stringConstraints": {}
-      },
-      {
-        "name": "policy_id",
-        "type": "number",
-        "required": true,
-        "numberConstraints": {
-          "precision": 0
-        }
-      },
-      {
-        "name": "amount",
-        "type": "number",
-        "required": true,
-        "numberConstraints": {
-          "precision": 2
-        }
-      }
-    ],
-    "payloadParams": [],
-    "status": "active",
-    "lastUsed": "2025-09-03T07:30:45.724Z"
+    "lastUsed": "2025-07-29T05:47:50.662Z"
   }
 ]

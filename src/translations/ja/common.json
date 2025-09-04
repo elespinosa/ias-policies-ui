@@ -94,6 +94,8 @@
   },
 
   "claims": {
+    "claim_added_success": "クレームが正常に追加されました",
+    "claim_added_success_description": "クレームが正常に追加されました",
     "create_new_claim": "新しいクレームを作成",
     "create_new_claim_description": "以下の情報を入力して新しい保険クレームを提出してください。",
     "claim_details": "クレーム詳細",
@@ -134,20 +136,32 @@
     "amount": "金額",
     "amount_placeholder": "金額を入力",
     "mark_as_collected": "回収済みとしてマーク",
-    "mark_as_collected_description": "送金された支払いの参照番号と日付を入力してください。",
+    "apply_payment": "支払いを適用",
+    "apply_payment_description": "送金された支払いの金額、参照番号、日付を入力してください。",
+    "payment_already_applied": "支払いが既に適用されています",
+    "payment_already_applied_description": "このポリシーに支払いが既に適用されています",
     "payment_details": "支払い詳細",
     "reference_number": "参照番号",
     "reference_number_placeholder": "参照番号を入力",
     "date": "日付",
     "documents": "ドキュメント",
     "payment_documents": "支払いドキュメント",
-    "payment_documents_description": "この支払いのサポートドキュメントをアップロードしてください"
+    "payment_documents_description": "この支払いのサポートドキュメントをアップロードしてください",
+    "payment_applied": "支払いが正常に適用されました",
+    "payment_applied_description": "支払いが正常に適用されました",
+    "payment_details_required": "支払い詳細が必要です",
+    "amount_required": "金額が必要です",
+    "reference_number_required": "参照番号が必要です",
+    "payment_date_required": "支払い日が必要です"
   },
   "renewals": {
+    "status_updated": "ステータス更新",
     "for_renewal": "更新対象",
     "status_updated_description": "更新ステータスが'{{status}}'に更新されました"
   },
   "policies": {
+    "policy_cancelled": "ポリシーがキャンセルされました",
+    "policy_cancelled_description": "ポリシーが正常にキャンセルされました",
     "policy_details": "ポリシー詳細",
     "edit_policy": "ポリシーを編集",
     "new_policy": "新しいポリシー",
@@ -192,11 +206,34 @@
     "email_notification": "メール通知",
     "email_notification_description": "ポリシー詳細をクライアントにメールで送信",
     "search_client": "クライアントを検索",
+    "search_client_placeholder": "クライアントを名前またはメールで検索",
+    "policy_created_from_quote": "見積もりからポリシーが正常に作成されました",
+    "policy_created_from_quote_description": "ポリシー {{policyNumber}} が {{clientName}} のために見積もり {{quoteNumber}} から作成されました。",
+    "policy_created_successfully": "ポリシーが正常に作成されました",
+    "policy_created_successfully_description": "ポリシー {{policyNumber}} が {{clientName}} のために作成されました。",
+    "policy_updated_successfully": "ポリシーが正常に更新されました",
+    "policy_updated_successfully_description": "ポリシー {{policyNumber}} が {{clientName}} のために更新されました。",
+    "client_id": "クライアントID",
+    "partner_id": "パートナーID",
+    "product_id": "製品ID",
+    "effective_date": "有効日",
+    "expiration_date": "有効期限",
+    "currency_code": "通貨コード",
+    "premium_amount": "保険料金額",
+    "deductible_amount": "免責金額",
+    "underwriting_notes": "アンダーライティングノート",
+    "auto_renewal": "自動更新",
     "toast": {
+      "exporting": {
+        "title": "エクスポート中",
+        "description": "すべてのポリシーをエクスポートしています。"
+      },
       "success_exporting": {
+        "title": "エクスポート成功",
         "description": "すべてのポリシーがダウンロードされました。"
       },
       "error_exporting": {
+        "title": "エクスポートエラー",
         "description": "ポリシーのエクスポート中にエラーが発生しました。"
       }
     }

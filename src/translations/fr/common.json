@@ -94,6 +94,8 @@
   },
 
   "claims": {
+    "claim_added_success": "Réclamation Ajoutée avec Succès",
+    "claim_added_success_description": "Réclamation ajoutée avec succès",
     "create_new_claim": "Créer une Nouvelle Réclamation",
     "create_new_claim_description": "Soumettez une nouvelle réclamation d'assurance en remplissant les informations ci-dessous.",
     "claim_details": "Détails de la Réclamation",
@@ -134,20 +136,32 @@
     "amount": "Montant",
     "amount_placeholder": "Entrez le montant",
     "mark_as_collected": "Marquer comme Collecté",
-    "mark_as_collected_description": "Entrez le numéro de référence et la date du paiement transmis.",
+    "apply_payment": "Appliquer le Paiement",
+    "apply_payment_description": "Entrez le montant, le numéro de référence et la date du paiement transmis.",
+    "payment_already_applied": "Paiement déjà appliqué",
+    "payment_already_applied_description": "Paiement déjà appliqué à cette police",
     "payment_details": "Détails du Paiement",
     "reference_number": "Numéro de Référence",
     "reference_number_placeholder": "Entrez le numéro de référence",
     "date": "Date",
     "documents": "Documents",
     "payment_documents": "Documents de Paiement",
-    "payment_documents_description": "Téléchargez des documents de support pour ce paiement"
+    "payment_documents_description": "Téléchargez des documents de support pour ce paiement",
+    "payment_applied": "Paiement appliqué avec succès",
+    "payment_applied_description": "Paiement appliqué avec succès",
+    "payment_details_required": "Les détails du paiement sont requis",
+    "amount_required": "Le montant est requis",
+    "reference_number_required": "Le numéro de référence est requis",
+    "payment_date_required": "La date du paiement est requise"
   },
   "renewals": {
+    "status_updated": "Statut Mis à Jour",
     "for_renewal": "Pour Renouvellement",
     "status_updated_description": "Statut de renouvellement mis à jour à '{{status}}'"
   },
   "policies": {
+    "policy_cancelled": "Police Annulée",
+    "policy_cancelled_description": "Police annulée avec succès",
     "policy_details": "Détails de la Police",
     "edit_policy": "Modifier la Police",
     "new_policy": "Nouvelle Police",
@@ -192,11 +206,34 @@
     "email_notification": "Notification par Email",
     "email_notification_description": "Envoyer un email au client avec les détails de la police",
     "search_client": "Rechercher le Client",
+    "search_client_placeholder": "Rechercher le client par nom ou email",
+    "policy_created_from_quote": "Police créée avec succès depuis le devis",
+    "policy_created_from_quote_description": "La police {{policyNumber}} a été créée pour {{clientName}} depuis le devis {{quoteNumber}}.",
+    "policy_created_successfully": "Police créée avec succès",
+    "policy_created_successfully_description": "La police {{policyNumber}} a été créée pour {{clientName}}.",
+    "policy_updated_successfully": "Police mise à jour avec succès",
+    "policy_updated_successfully_description": "La police {{policyNumber}} a été mise à jour pour {{clientName}}.",
+    "client_id": "ID du Client",
+    "partner_id": "ID du Partenaire",
+    "product_id": "ID du Produit",
+    "effective_date": "Date d'Entrée en Vigueur",
+    "expiration_date": "Date d'Expiration",
+    "currency_code": "Code de Devise",
+    "premium_amount": "Montant de la Prime",
+    "deductible_amount": "Montant de la Franchise",
+    "underwriting_notes": "Notes de Souscription",
+    "auto_renewal": "Renouvellement Automatique",
     "toast": {
+      "exporting": {
+        "title": "Exportation",
+        "description": "Toutes les Polices sont en cours d'exportation."
+      },
       "success_exporting": {
+        "title": "Exportation Réussie",
         "description": "Toutes les Polices ont été téléchargées."
       },
       "error_exporting": {
+        "title": "Erreur d'Exportation",
         "description": "Une erreur s'est produite lors de l'exportation des polices."
       }
     }

@@ -5,7 +5,8 @@ import { ImportResults } from "@/components/ImportResults";
 import { Button } from "@/components/ui/button";
 import { ViewImportData } from "@/components/ViewImportData";
 import { policyUploadingTemplate } from "@/data/mockDatabase";
-import { useToast } from "@/hooks/use-toast";
+import { showToastWithDescription } from "@/lib/toast";
+
 import { api } from "@/services/api";
 import {
   ColumnMapping as ColumnMappingType,
@@ -21,7 +22,6 @@ import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
 export const DataImport: React.FC = () => {
-  const { toast } = useToast();
   const { t } = useTranslation();
 
   const [currentStep, setCurrentStep] = React.useState(1);
@@ -103,7 +103,7 @@ export const DataImport: React.FC = () => {
           try {
             const response = await api.post(selectedTable.urlEndpoint, rowData);
             results.push(response.data);
-            importedRows.push({ id: i + 1, row_number: i + 1, ...rowData });
+            importedRows.push({ id: i + 1, row_no: i + 1, ...rowData });
           } catch (error: any) {
             const errorMessage =
               error.response?.data?.error || error.message || "Unknown error";
@@ -111,7 +111,7 @@ export const DataImport: React.FC = () => {
               row: i + 1,
               error: { message: errorMessage },
             });
-            failedRowsData.push({ id: i + 1, row_number: i + 1, ...rowData });
+            failedRowsData.push({ id: i + 1, row_no: i + 1, ...rowData });
           }
         }
 
@@ -199,13 +199,13 @@ export const DataImport: React.FC = () => {
         });
 
         setImportResult(importResult);
-
-        toast({
-          title: t("uploading:import_successful"),
-          description: t("uploading:import_successful_description", {
+        showToastWithDescription(
+          t("uploading:import_successful"),
+          t("uploading:import_successful_description", {
             rows: importResult.successfulRows,
           }),
-        });
+          "success"
+        );
         return; // Exit early to avoid the code below
       }
 
@@ -228,21 +228,22 @@ export const DataImport: React.FC = () => {
       setImportResult(importResult);
 
       if (importResult.success) {
-        toast({
-          title: t("uploading:import_successful"),
-          description: t("uploading:import_successful_msg", {
+        showToastWithDescription(
+          t("uploading:import_successful"),
+          t("uploading:import_successful_msg", {
             rows: importResult.successfulRows,
           }),
-        });
+          "success"
+        );
       } else {
-        toast({
-          title: t("uploading:import_completed_w_errors"),
-          description: t("uploading:import_completed_w_errors_msg", {
+        showToastWithDescription(
+          t("uploading:import_completed_w_errors"),
+          t("uploading:import_completed_w_errors_msg", {
             successfulRows: importResult.successfulRows,
             failedRows: importResult.failedRows,
           }),
-          variant: "destructive",
-        });
+          "error"
+        );
       }
     } catch (error) {
       const endTime = Date.now();
@@ -268,14 +269,13 @@ export const DataImport: React.FC = () => {
         duration,
       });
 
-      toast({
-        title: t("uploading:import_failed"),
-        description:
-          error instanceof Error
-            ? error.message
-            : t("uploading:import_failed_msg"),
-        variant: "destructive",
-      });
+      showToastWithDescription(
+        t("uploading:import_failed"),
+        error instanceof Error
+          ? error.message
+          : t("uploading:import_failed_msg"),
+        "error"
+      );
     } finally {
       setIsImporting(false);
     }
@@ -385,20 +385,18 @@ export const DataImport: React.FC = () => {
               onViewImportedData={(type) => {
                 setIsViewImportedDataOpen(true);
                 setViewImportedData(type);
-                toast({
-                  title:
-                    type === "success"
-                      ? t("uploading:view_imported_data")
-                      : t("uploading:view_unimported_data"),
-                  description:
-                    type === "success"
-                      ? t("uploading:view_imported_data_toast_msg", {
-                          displayName: selectedTable?.displayName,
-                        })
-                      : t("uploading:view_unimported_data_toast_msg", {
-                          displayName: selectedTable?.displayName,
-                        }),
-                });
+                showToastWithDescription(
+                  type === "success"
+                    ? t("uploading:view_imported_data")
+                    : t("uploading:view_unimported_data"),
+                  type === "success"
+                    ? t("uploading:view_imported_data_toast_msg", {
+                        displayName: selectedTable?.displayName,
+                      })
+                    : t("uploading:view_unimported_data_toast_msg", {
+                        displayName: selectedTable?.displayName,
+                      })
+                );
               }}
               fileName={fileData?.fileName}
               tableName={selectedTable?.displayName}
@@ -411,6 +409,7 @@ export const DataImport: React.FC = () => {
               onClose={() => setIsViewImportedDataOpen(false)}
               importResult={importResult}
               dataType={viewImportedData}
+              selectedTable={selectedTable}
             />
           )}
 

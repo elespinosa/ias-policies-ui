@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { getHeaders } from "@/functions/actions";
 import { getTotalRows } from "@/services/claimsServices";
-import { ImportResult } from "@/types/import";
+import { DatabaseTable, ImportResult } from "@/types/import";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -20,12 +20,14 @@ interface LOVProps {
   onClose: () => void;
   importResult: ImportResult;
   dataType: "success" | "failed";
+  selectedTable: DatabaseTable;
 }
 
 const ROWS_PER_PAGE = 10;
 export const ViewImportData = ({
   className = "",
   importResult,
+  selectedTable,
   isOpen,
   dataType,
   onClose,
@@ -59,7 +61,15 @@ export const ViewImportData = ({
         lastIndex = dataLength;
       }
 
-      const dataToDisplay = dataList.slice(firstIndex, lastIndex);
+      const data = dataList.slice(firstIndex, lastIndex);
+      const dataToDisplay = data.map((row) => {
+        const clonedRow = { ...row };
+        for (const column of selectedTable.additionalColumns || []) {
+          delete clonedRow[column.name];
+        }
+        return clonedRow;
+      });
+
       const tempHeaders = getHeaders(dataToDisplay, t);
       setHeaders(tempHeaders);
       setTotalRows(getTotalRows(dataList));
@@ -70,7 +80,7 @@ export const ViewImportData = ({
   return (
     <div className={`space-y-2 ${className}`}>
       <Dialog open={isOpen} onOpenChange={onClose}>
-        <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-y-auto">
+        <DialogContent className="sm:max-w-[800px] md:max-w-[70vw] max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>
               {dataType === "success"

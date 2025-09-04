@@ -94,6 +94,8 @@
   },
 
   "claims": {
+    "claim_added_success": "索赔添加成功",
+    "claim_added_success_description": "索赔添加成功",
     "create_new_claim": "创建新索赔",
     "create_new_claim_description": "通过填写以下信息提交新的保险索赔。",
     "claim_details": "索赔详情",
@@ -134,20 +136,32 @@
     "amount": "金额",
     "amount_placeholder": "输入金额",
     "mark_as_collected": "标记为已收取",
-    "mark_as_collected_description": "输入汇款付款的参考号和日期。",
+    "apply_payment": "应用付款",
+    "apply_payment_description": "输入汇款付款的金额、参考号和日期。",
+    "payment_already_applied": "付款已应用",
+    "payment_already_applied_description": "此保单已应用付款",
     "payment_details": "付款详情",
     "reference_number": "参考号",
     "reference_number_placeholder": "输入参考号",
     "date": "日期",
     "documents": "文档",
     "payment_documents": "付款文档",
-    "payment_documents_description": "上传此付款的支持文档"
+    "payment_documents_description": "上传此付款的支持文档",
+    "payment_applied": "付款应用成功",
+    "payment_applied_description": "付款应用成功",
+    "payment_details_required": "付款详情是必需的",
+    "amount_required": "金额是必需的",
+    "reference_number_required": "参考号是必需的",
+    "payment_date_required": "付款日期是必需的"
   },
   "renewals": {
+    "status_updated": "状态已更新",
     "for_renewal": "待续保",
     "status_updated_description": "续保状态已更新为 '{{status}}'"
   },
   "policies": {
+    "policy_cancelled": "保单已取消",
+    "policy_cancelled_description": "保单取消成功",
     "policy_details": "保单详情",
     "edit_policy": "编辑保单",
     "new_policy": "新保单",
@@ -192,11 +206,34 @@
     "email_notification": "电子邮件通知",
     "email_notification_description": "向客户发送包含保单详情的电子邮件",
     "search_client": "搜索客户",
+    "search_client_placeholder": "按客户姓名或邮箱搜索",
+    "policy_created_from_quote": "从报价成功创建保单",
+    "policy_created_from_quote_description": "保单 {{policyNumber}} 已为 {{clientName}} 从报价 {{quoteNumber}} 创建。",
+    "policy_created_successfully": "保单创建成功",
+    "policy_created_successfully_description": "保单 {{policyNumber}} 已为 {{clientName}} 创建。",
+    "policy_updated_successfully": "保单更新成功",
+    "policy_updated_successfully_description": "保单 {{policyNumber}} 已为 {{clientName}} 更新。",
+    "client_id": "客户ID",
+    "partner_id": "合作伙伴ID",
+    "product_id": "产品ID",
+    "effective_date": "生效日期",
+    "expiration_date": "到期日期",
+    "currency_code": "货币代码",
+    "premium_amount": "保费金额",
+    "deductible_amount": "免赔额",
+    "underwriting_notes": "承保备注",
+    "auto_renewal": "自动续保",
     "toast": {
+      "exporting": {
+        "title": "导出中",
+        "description": "正在导出所有保单。"
+      },
       "success_exporting": {
+        "title": "导出成功",
         "description": "所有保单已下载。"
       },
       "error_exporting": {
+        "title": "导出错误",
         "description": "导出保单时发生错误。"
       }
     }
